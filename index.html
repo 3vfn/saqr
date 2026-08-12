@@ -1,46 +1,66 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة صقر | Saqr - المنصة العربية الأولى للألعاب والفقرات التفاعلية</title>
 
-    <!-- PWA & Open Graph -->
+    <!-- PWA & Open Graph Metadata -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0f172a">
     <meta property="og:title" content="منصة صقر | Saqr Platform">
     <meta property="og:description" content="المنصة العربية الأولى للألعاب والفقرات التفاعلية لصناع المحتوى والفعاليات.">
     <meta property="og:type" content="website">
 
-    <!-- CDNs (Font Awesome 6.4.0 & TailwindCSS) -->
+    <!-- Google Fonts: Cairo Font for Modern Arabic Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6.4.0 & TailwindCSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase JS Client Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        .glow-amber {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25);
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
 
     <!-- الهيدر وشريط التنقل -->
-    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <i class="fa-solid fa-feather-pointed text-3xl text-amber-500"></i>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20">
+                    <i class="fa-solid fa-feather-pointed text-xl"></i>
+                </div>
                 <div class="flex flex-col">
                     <span class="text-2xl font-black tracking-wide bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">صقر</span>
-                    <span class="text-[10px] text-slate-400 -mt-1 font-semibold">SAQR PLATFORM</span>
+                    <span class="text-[9px] text-slate-400 -mt-1 font-bold tracking-widest">SAQR PLATFORM</span>
                 </div>
             </div>
 
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+            <nav class="hidden md:flex items-center gap-8 text-sm font-bold text-slate-300">
                 <a href="#home" class="hover:text-amber-400 transition-colors">الرئيسية</a>
-                <a href="#games" class="hover:text-amber-400 transition-colors">الألعاب</a>
-                <a href="#pricing" class="hover:text-amber-400 transition-colors">الأسعار</a>
-                <a href="#faq" class="hover:text-amber-400 transition-colors">الأسئلة الشائعة</a>
+                <a href="#games" class="hover:text-amber-400 transition-colors">الألعاب التفاعلية</a>
+                <a href="#categories" class="hover:text-amber-400 transition-colors">الأقسام</a>
+                <a href="#faq" class="hover:text-amber-400 transition-colors">الدعم</a>
             </nav>
 
             <div class="flex items-center gap-3">
-                <button class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg font-bold transition-all">
-                    دخول غرفة
+                <button onclick="openRoomCodeModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-key text-amber-500"></i>
+                    <span>دخول غرفة</span>
                 </button>
-                <button class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg font-black shadow-lg shadow-amber-500/10 transition-all">
+                <button class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 text-xs sm:text-sm px-4 py-2 rounded-xl font-black shadow-lg shadow-amber-500/15 transition-all cursor-pointer">
                     تسجيل الدخول
                 </button>
             </div>
@@ -50,196 +70,371 @@
     <!-- قسم الهيرو الرئيسي -->
     <section id="home" class="relative py-16 lg:py-24 px-4 max-w-7xl mx-auto w-full overflow-hidden">
         <div class="text-center max-w-3xl mx-auto space-y-6">
-            <span class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold px-4 py-1.5 rounded-full">
-                <i class="fa-solid fa-bolt text-amber-400"></i> تحديثات مستمرة وواجهات عصرية
+            <span class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-extrabold px-4 py-1.5 rounded-full shadow-sm">
+                <i class="fa-solid fa-bolt text-amber-400"></i> منصة الجيل الجديد لصناع المحتوى والفعاليات
             </span>
             <h1 class="text-4xl sm:text-6xl font-black leading-tight tracking-tight">
                 المنصة العربية الأولى <br>
                 <span class="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 bg-clip-text text-transparent">للألعاب والفقرات التفاعلية</span>
             </h1>
-            <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                سواء كنت صانع محتوى على تيك توك، تدير جلسات في برامج صوتية، تنظم تجمعات وفعاليات عائلية، أو ببساطة تبحث عن التسلية الفردية بألعاب مجانية؛ منصة <strong class="text-amber-400">صقر</strong> هي خيارك الأمثل لزيادة التفاعل وبث الحماس!
+            <p class="text-slate-400 text-sm sm:text-base leading-relaxed font-medium">
+                سواء كنت صانع محتوى على تيك توك، تدير جلسات صوتية، تنظم تجمعات عائلية، أو تبحث عن التسلية بمسابقات مباشرة؛ منصة <strong class="text-amber-400 font-bold">صقر</strong> تمنحك التحكم الكامل في الغرف والتحديات بأعلى أداء.
             </p>
             <div class="flex flex-wrap justify-center gap-4 pt-4">
-                <a href="#games" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-gamepad"></i> استكشف مكتبة الألعاب
+                <a href="#games" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black px-7 py-3.5 rounded-xl shadow-xl shadow-amber-500/15 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad text-lg"></i> استكشف مكتبة الألعاب
                 </a>
-                <button class="bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-200 font-bold px-6 py-3 rounded-xl transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-key text-amber-500"></i> ادخل كود الغرفة
+                <button onclick="openRoomCodeModal()" class="bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-200 font-bold px-7 py-3.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket text-amber-500"></i> الانضمام لغرفة نشطة
                 </button>
             </div>
         </div>
 
         <!-- الإحصائيات -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
-            <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-center">
+            <div class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl text-center backdrop-blur-sm">
                 <div class="text-2xl sm:text-3xl font-black text-amber-400">+1,500</div>
-                <div class="text-xs text-slate-400 mt-1">غرفة نشطة</div>
+                <div class="text-xs text-slate-400 font-bold mt-1">غرفة تفاعلية</div>
             </div>
-            <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-center">
+            <div class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl text-center backdrop-blur-sm">
                 <div class="text-2xl sm:text-3xl font-black text-amber-400">+5,000</div>
-                <div class="text-xs text-slate-400 mt-1">مستخدم نشط</div>
+                <div class="text-xs text-slate-400 font-bold mt-1">مستخدم نشط</div>
             </div>
-            <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-center">
+            <div class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl text-center backdrop-blur-sm">
                 <div class="text-2xl sm:text-3xl font-black text-amber-400">+400</div>
-                <div class="text-xs text-slate-400 mt-1">صانع محتوى</div>
+                <div class="text-xs text-slate-400 font-bold mt-1">صانع محتوى</div>
             </div>
-            <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-center">
+            <div class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl text-center backdrop-blur-sm">
                 <div class="text-2xl sm:text-3xl font-black text-amber-400">+50</div>
-                <div class="text-xs text-slate-400 mt-1">لعبة تفاعلية</div>
+                <div class="text-xs text-slate-400 font-bold mt-1">لعبة ومسابقة</div>
             </div>
         </div>
     </section>
 
     <!-- معرض الألعاب المباشر -->
-    <section id="games" class="py-12 bg-slate-900/30 border-y border-slate-800/80">
+    <section id="games" class="py-14 bg-slate-900/40 border-y border-slate-800/80 relative">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="mb-8">
-                <h2 class="text-2xl sm:text-3xl font-black text-slate-100">معرض الألعاب والغرف التفاعلية المباشر</h2>
-                <p class="text-slate-400 text-sm mt-1">استكشف الألعاب الحماسية والغرف النشطة التي يديرها صناع المحتوى الآن على منصة صقر.</p>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-100 flex items-center gap-3">
+                        <i class="fa-solid fa-trophy text-amber-500"></i> معرض الألعاب التفاعلية المباشر
+                    </h2>
+                    <p class="text-slate-400 text-xs sm:text-sm font-medium mt-1">اختر أي لعبة لتجربتها مباشرة أو بدء غرفة منافسة جماعية مع جمهورك.</p>
+                </div>
+                <button onclick="loadSaqrGames()" class="text-xs bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold px-4 py-2 rounded-lg border border-slate-700 transition-all flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-rotate"></i> تحديث قائمة الألعاب
+                </button>
             </div>
 
-            <!-- الحاوية الديناميكية للجلب سحابياً -->
+            <!-- الحاوية الديناميكية للجلب من Database / Worker -->
             <div id="games-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-full text-center py-12 text-slate-400 animate-pulse">
-                    <i class="fa-solid fa-spinner fa-spin text-3xl text-amber-500 mb-3"></i>
-                    <p>جاري تحميل ألعاب منصة صقر سحابياً...</p>
+                <div class="col-span-full text-center py-16 text-slate-400 animate-pulse">
+                    <i class="fa-solid fa-spinner fa-spin text-4xl text-amber-500 mb-3"></i>
+                    <p class="font-bold text-sm">جاري جلب ألعاب منصة صقر من الخادم السحابي...</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- أقسام الألعاب الرئيسية -->
-    <section class="py-16 max-w-7xl mx-auto px-4">
+    <section id="categories" class="py-16 max-w-7xl mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-black">أقسام الألعاب الرئيسية</h2>
-            <p class="text-slate-400 text-sm mt-2">قمنا بتقسيم الألعاب إلى أربعة أقسام مستقلة لتناسب جميع الاحتياجات والفعاليات.</p>
+            <p class="text-slate-400 text-sm font-medium mt-2">تصنيفات متكاملة تناسب البثوث المباشرة، التجمعات، والتحديات الفردية.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+            <div class="bg-slate-900/80 border border-slate-800 hover:border-emerald-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all">
                 <div>
-                    <span class="text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full">مجانية بالكامل</span>
-                    <h3 class="text-xl font-bold mt-4 mb-2">الألعاب المجانية</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">ألعاب ترفيهية خفيفة وسريعة لا تحتاج إلى اشتراك أو كود تفعيل.</p>
+                    <span class="text-[11px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full">مجانية بالكامل</span>
+                    <h3 class="text-xl font-bold mt-4 mb-2">الألعاب العامة</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed font-medium">ألعاب ترفيهية وسريعة مثل خمن الصورة، الكلمة المفقودة، وسرعة البديهة.</p>
                 </div>
-                <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="filterCategory('مجانية')" class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer">استكشف الألعاب <i class="fa-solid fa-arrow-left"></i></button>
             </div>
 
-            <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-6 flex flex-col justify-between">
+            <div class="bg-slate-900/80 border border-amber-500/30 hover:border-amber-500/60 rounded-2xl p-6 flex flex-col justify-between transition-all glow-amber">
                 <div>
-                    <span class="text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full">باقة صقر بلس</span>
-                    <h3 class="text-xl font-bold mt-4 mb-2">باقة صقر بلس (Saqr+)</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">باقة حصرية تضم أقوى الألعاب الجماعية المصممة للمسابقات والتحديات الكبرى.</p>
+                    <span class="text-[11px] font-black bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full">باقة صقر بلس</span>
+                    <h3 class="text-xl font-bold mt-4 mb-2">صقر بلس (Saqr+)</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed font-medium">باقة المسابقات الجماعية الكبرى المصممة خصيصاً للستريمرز وصناع المحتوى.</p>
                 </div>
-                <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="filterCategory('بلس')" class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer">استكشف الألعاب <i class="fa-solid fa-arrow-left"></i></button>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+            <div class="bg-slate-900/80 border border-slate-800 hover:border-blue-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all">
                 <div>
-                    <span class="text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full">ربط مباشر بالشات</span>
+                    <span class="text-[11px] font-black bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full">تفاعل الشات</span>
                     <h3 class="text-xl font-bold mt-4 mb-2">ألعاب البث المباشر</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">اربط اللعبة ببثك المباشر ودع المشاهدين يلعبون تلقائياً عبر الشات.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed font-medium">ربط مباشر مع شات تيك توك وتويتش لتبدأ التحديات بمشاركة المشاهدين فوراً.</p>
                 </div>
-                <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="filterCategory('بث مباشر')" class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer">استكشف الألعاب <i class="fa-solid fa-arrow-left"></i></button>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+            <div class="bg-slate-900/80 border border-slate-800 hover:border-purple-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all">
                 <div>
-                    <span class="text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 px-3 py-1 rounded-full">بنك أسئلة متكامل</span>
-                    <h3 class="text-xl font-bold mt-4 mb-2">موسوعة الأسئلة</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">أضخم بنك أسئلة ثقافية وتحديات فكرية مصنف ومحدث باستمرار.</p>
+                    <span class="text-[11px] font-black bg-purple-500/10 text-purple-400 border border-purple-500/20 px-3 py-1 rounded-full">موسوعة ثقافة</span>
+                    <h3 class="text-xl font-bold mt-4 mb-2">تحديات المعرفة</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed font-medium">آلاف الأسئلة المصنفة في الألعاب، الرياضة، التاريخ، والسينما العربية والعالمية.</p>
                 </div>
-                <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="filterCategory('معرفة')" class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer">استكشف الألعاب <i class="fa-solid fa-arrow-left"></i></button>
             </div>
         </div>
     </section>
+
+    <!-- Modal: تجربة اللعبة التفاعلية المباشرة -->
+    <div id="game-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeGameModal()" class="absolute top-4 left-4 text-slate-400 hover:text-rose-400 transition-colors text-xl cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div id="modal-content">
+                <!-- جاري تحميل تجربة اللعبة -->
+            </div>
+        </div>
+    </div>
 
     <!-- الفوتر وحقوق المنصة -->
     <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-12">
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="space-y-4">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-feather-pointed text-2xl text-amber-500"></i>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 font-black">
+                        <i class="fa-solid fa-feather-pointed"></i>
+                    </div>
                     <span class="text-xl font-black text-amber-400">صقر</span>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    منصة صقر (Saqr) هي المنصة العربية الأولى في تقديم ألعاب تفاعلية مخصصة لصناع المحتوى ومقدمين البثوث. أنشئ غرفتك الآن وابدأ المرح!
+                <p class="text-xs text-slate-400 leading-relaxed font-medium">
+                    منصة صقر (Saqr) هي المنصة العربية الأولى المتخصصة في إثراء المحتوى العربي بالألعاب والفقرات التفاعلية المباشرة لصناع المحتوى والجلسات الجماعية.
                 </p>
             </div>
 
             <div>
-                <h4 class="text-sm font-bold text-slate-200 mb-4">أقسام الموقع</h4>
-                <ul class="space-y-2 text-xs text-slate-400">
-                    <li><a href="#" class="hover:text-amber-400">الرئيسية</a></li>
-                    <li><a href="#" class="hover:text-amber-400">الألعاب التفاعلية</a></li>
-                    <li><a href="#" class="hover:text-amber-400">خطط الاشتراك</a></li>
-                    <li><a href="#" class="hover:text-amber-400">دخول غرفة</a></li>
+                <h4 class="text-sm font-bold text-slate-200 mb-4">روابط السريعة</h4>
+                <ul class="space-y-2.5 text-xs text-slate-400 font-bold">
+                    <li><a href="#home" class="hover:text-amber-400 transition-colors">الرئيسية</a></li>
+                    <li><a href="#games" class="hover:text-amber-400 transition-colors">مكتبة الألعاب</a></li>
+                    <li><a href="#categories" class="hover:text-amber-400 transition-colors">أقسام المنصة</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-sm font-bold text-slate-200 mb-4">الدعم والمساعدة</h4>
-                <ul class="space-y-2 text-xs text-slate-400">
-                    <li><a href="#" class="hover:text-amber-400">الأسئلة الشائعة</a></li>
-                    <li><a href="#" class="hover:text-amber-400">الدعم الفني</a></li>
-                    <li><a href="#" class="hover:text-amber-400">شراء باقة</a></li>
-                    <li><a href="#" class="hover:text-amber-400">سياسة الخصوصية</a></li>
+                <h4 class="text-sm font-bold text-slate-200 mb-4">الدعم الفني</h4>
+                <ul class="space-y-2.5 text-xs text-slate-400 font-bold">
+                    <li><a href="#" class="hover:text-amber-400 transition-colors">الأسئلة الشائعة</a></li>
+                    <li><a href="#" class="hover:text-amber-400 transition-colors">مركز المساعدة</a></li>
+                    <li><a href="#" class="hover:text-amber-400 transition-colors">شروط الخدمة</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-sm font-bold text-slate-200 mb-4">المنصات والخدمات</h4>
-                <div class="flex flex-wrap gap-2 text-xs">
-                    <span class="bg-slate-800 px-3 py-1 rounded-md text-slate-300">تيك توك لايف</span>
-                    <span class="bg-slate-800 px-3 py-1 rounded-md text-slate-300">تويتش لايف</span>
-                    <span class="bg-slate-800 px-3 py-1 rounded-md text-slate-300">كيك لايف</span>
-                    <span class="bg-slate-800 px-3 py-1 rounded-md text-slate-300">ديسكورد</span>
+                <h4 class="text-sm font-bold text-slate-200 mb-4">تكامل المنصات</h4>
+                <div class="flex flex-wrap gap-2 text-xs font-bold">
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300 border border-slate-700/60">TikTok Live</span>
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300 border border-slate-700/60">Twitch</span>
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300 border border-slate-700/60">Kick</span>
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300 border border-slate-700/60">Discord</span>
                 </div>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 border-t border-slate-800/60 mt-8 pt-6 text-center text-xs text-slate-500">
-            <p>جميع الحقوق محفوظة &copy; 2026 - **منصة صقر (Saqr Platform)**</p>
+        <div class="max-w-7xl mx-auto px-4 border-t border-slate-800/60 mt-8 pt-6 text-center text-xs text-slate-500 font-bold">
+            <p>جميع الحقوق محفوظة &copy; 2026 - <span class="text-slate-300">منصة صقر (Saqr Platform)</span></p>
         </div>
     </footer>
 
-    <!-- سكربت جلب البيانات من Cloudflare Worker -->
+    <!-- JavaScript logic & DB Integration -->
     <script>
-        const API_URL = 'https://saqrr.sindazon.workers.dev/api/games';
+        // إعداد العميل الرئيسي لـ Supabase مع خادم Cloudflare Worker الاحتياطي
+        const SUPABASE_URL = 'https://YOUR_SUPABASE_PROJECT_ID.supabase.co';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const WORKER_API_URL = 'https://saqrr.sindazon.workers.dev/api/games';
+
+        let supabaseClient = null;
+        if (typeof supabase !== 'undefined' && SUPABASE_URL.includes('.supabase.co')) {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        // بيانات ألعاب افتراضية عالية الجودة في حال انقطاع الشبكة أو التطوير المحلي
+        const defaultSaqrGames = [
+            {
+                id: 1,
+                title: 'تحدي سرعة البديهة',
+                category: 'مجانية',
+                platform: 'جميع المنصات',
+                rating: '4.9',
+                description: 'أسئلة حماسية وسريعة تحتاج إجابة خلال 5 ثوانٍ فقط!',
+                sample_question: 'ما هو أسرع حيوان بري في العالم؟',
+                options: ['الفهد', 'الأسد', 'الغزال', 'الخيول'],
+                correct: 0
+            },
+            {
+                id: 2,
+                title: 'سؤال وجواب (صقر بلس)',
+                category: 'بلس',
+                platform: 'TikTok / Twitch',
+                rating: '5.0',
+                description: 'مسابقة ثنائية للمحتوى والتحديات المباشرة بين فريقين.',
+                sample_question: 'في أي عام أطلقت منصة صقر للتطبيقات التفاعلية؟',
+                options: ['2024', '2025', '2026', '2023'],
+                correct: 2
+            },
+            {
+                id: 3,
+                title: 'خمن اسم الفيلم / المسلسل',
+                category: 'معرفة',
+                platform: 'Discord / Web',
+                rating: '4.8',
+                description: 'عبر الرموز التعبيرية والإشارات، خمن العمل الدرامي الشهير.',
+                sample_question: 'خمن العمل من الرموز: 👨‍🔬🟢🧪',
+                options: ['Breaking Bad', 'Dark', 'Peaky Blinders', 'Mindhunter'],
+                correct: 0
+            }
+        ];
+
+        let loadedGames = [];
 
         async function loadSaqrGames() {
             const container = document.getElementById('games-container');
-            try {
-                const response = await fetch(API_URL);
-                const result = await response.json();
+            container.innerHTML = `
+                <div class="col-span-full text-center py-16 text-slate-400 animate-pulse">
+                    <i class="fa-solid fa-spinner fa-spin text-4xl text-amber-500 mb-3"></i>
+                    <p class="font-bold text-sm">جاري جلب ألعاب منصة صقر...</p>
+                </div>
+            `;
 
-                if (result.success && result.data && result.data.length > 0) {
-                    container.innerHTML = result.data.map(game => `
-                        <div class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 transition-all hover:-translate-y-1 shadow-lg">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-md border border-amber-500/20">
-                                    ${game.category || 'تفاعلي'}
-                                </span>
-                                <span class="text-xs text-slate-400 font-semibold">
-                                    <i class="fa-solid fa-star text-amber-400 ml-1"></i>${game.rating || '5.0'}
-                                </span>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-100 mb-2">${game.title}</h3>
-                            <p class="text-slate-400 text-xs mb-4">منصات التشغيل: ${game.platform || 'جميع المنصات'}</p>
-                            <button class="w-full bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
-                                انضم للعبة الآن
-                            </button>
-                        </div>
-                    `).join('');
-                } else {
-                    container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">لا توجد ألعاب متوفرة حالياً.</p>`;
+            try {
+                let gamesData = null;
+
+                // 1. المحاولة الأولى: الجلب المباشر من جدول Supabase
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient.from('games').select('*');
+                    if (!error && data && data.length > 0) {
+                        gamesData = data;
+                    }
                 }
+
+                // 2. المحاولة الثانية: الجلب عبر Cloudflare Worker API
+                if (!gamesData) {
+                    const res = await fetch(WORKER_API_URL);
+                    const result = await res.json();
+                    if (result.success && result.data && result.data.length > 0) {
+                        gamesData = result.data;
+                    }
+                }
+
+                // 3. الاحتياطي الأخير: الاعتماد على البيانات المضمنة
+                if (!gamesData || gamesData.length === 0) {
+                    gamesData = defaultSaqrGames;
+                }
+
+                loadedGames = gamesData;
+                renderGamesCards(loadedGames);
+
             } catch (err) {
-                container.innerHTML = `<p class="col-span-full text-center text-rose-400 py-8">حدث خطأ أثناء تحميل ألعاب منصة صقر: ${err.message}</p>`;
+                console.warn("جاري استخدام البيانات الاحتياطية لعدم توفر الاتصال السحابي حالياً:", err);
+                loadedGames = defaultSaqrGames;
+                renderGamesCards(loadedGames);
             }
         }
 
+        function renderGamesCards(games) {
+            const container = document.getElementById('games-container');
+            container.innerHTML = games.map(game => `
+                <div class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 transition-all hover:-translate-y-1.5 shadow-xl flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="bg-amber-500/10 text-amber-400 text-xs font-black px-3 py-1 rounded-lg border border-amber-500/20">
+                                ${game.category || 'تفاعلي'}
+                            </span>
+                            <span class="text-xs text-slate-400 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-star text-amber-400"></i> ${game.rating || '5.0'}
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-100 group-hover:text-amber-400 transition-colors mb-2">${game.title}</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed font-medium mb-4">${game.description || 'لعبة تفاعلية ممتعة تناسب جميع الفعاليات والجلسات.'}</p>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 font-bold border-t border-slate-800/80 pt-3">
+                            <span><i class="fa-solid fa-desktop ml-1"></i> ${game.platform || 'جميع المنصات'}</span>
+                            <span class="text-emerald-400"><i class="fa-solid fa-circle text-[8px] ml-1"></i> جاهزة للتشغيل</span>
+                        </div>
+                        <button onclick="playDemoGame(${game.id})" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 text-xs font-black py-3 rounded-xl shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> تجربة اللعبة الآن
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // تشغيل تجربة اللعبة التفاعلية داخل الـ Modal
+        function playDemoGame(gameId) {
+            const game = loadedGames.find(g => g.id === gameId) || defaultSaqrGames[0];
+            const modal = document.getElementById('game-modal');
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = `
+                <div class="text-center space-y-4">
+                    <span class="inline-block bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-black px-3 py-1 rounded-full">
+                        تجربة مباشرة | ${game.title}
+                    </span>
+                    <h3 class="text-xl font-black text-slate-100">${game.sample_question || 'ما هو أسرع كائن على اليابسة؟'}</h3>
+                    
+                    <div id="options-grid" class="grid grid-cols-1 gap-2.5 pt-2">
+                        ${(game.options || ['الفهد', 'الأسد', 'الغزال', 'الخيل']).map((opt, idx) => `
+                            <button onclick="checkAnswer(${idx}, ${game.correct ?? 0})" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl border border-slate-700 transition-all text-right flex justify-between items-center cursor-pointer">
+                                <span>${opt}</span>
+                                <i class="fa-regular fa-circle text-slate-500"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="game-feedback" class="min-h-[30px] text-xs font-bold pt-2"></div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function checkAnswer(selectedIndex, correctIndex) {
+            const feedback = document.getElementById('game-feedback');
+            if (selectedIndex === correctIndex) {
+                feedback.innerHTML = `<span class="text-emerald-400"><i class="fa-solid fa-circle-check ml-1"></i> إجابة صحيحة! أحسنت، منصة صقر ترحب بك!</span>`;
+            } else {
+                feedback.innerHTML = `<span class="text-rose-400"><i class="fa-solid fa-circle-xmark ml-1"></i> إجابة خاطئة، حاول مرة أخرى!</span>`;
+            }
+        }
+
+        function closeGameModal() {
+            document.getElementById('game-modal').classList.add('hidden');
+        }
+
+        function openRoomCodeModal() {
+            const modal = document.getElementById('game-modal');
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = `
+                <div class="space-y-4 text-center">
+                    <i class="fa-solid fa-key text-4xl text-amber-500"></i>
+                    <h3 class="text-xl font-black text-slate-100">الانضمام إلى غرفة صقر</h3>
+                    <p class="text-xs text-slate-400 font-medium">أدخل كود الغرفة المكون من 6 أرقام والمشارك من قبل صانع المحتوى:</p>
+                    <input type="text" maxlength="6" placeholder="مثال: 884920" class="w-full text-center text-lg tracking-widest font-black bg-slate-950 border border-slate-700 rounded-xl py-3 text-amber-400 focus:border-amber-500 outline-none">
+                    <button onclick="closeGameModal()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-3 rounded-xl transition-all cursor-pointer text-xs">
+                        دخول الغرفة الان
+                    </button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function filterCategory(cat) {
+            const filtered = loadedGames.filter(g => (g.category || '').includes(cat));
+            renderGamesCards(filtered.length > 0 ? filtered : loadedGames);
+        }
+
+        // بدء تحميل الألعاب عند فتح الصفحة
         loadSaqrGames();
     </script>
 </body>
