@@ -60,7 +60,10 @@
     // جلب قائمة الألعاب
     async function fetchGames() {
       try {
-        const res = await fetch(`${API_BASE}/api/games`);
+        const res = await fetch(`${API_BASE}/api/games`, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
         const data = await res.json();
         log(data);
 
@@ -74,12 +77,14 @@
           data.data.forEach(game => {
             listDiv.innerHTML += `
               <div class="game-item">
-                <span><b>#${game.id}</b> - ${game.title} (${game.category})</span>
-                <span>⭐ ${game.rating}</span>
+                <span><b>#${game.id}</b> - ${game.title} (${game.category || 'عام'})</span>
+                <span>⭐ ${game.rating || 0}</span>
               </div>
             `;
             selectDiv.innerHTML += `<option value="${game.id}">${game.title} (#${game.id})</option>`;
           });
+        } else {
+          log({ error: 'لم يتم العثور على ألعاب أو تحدث مشكلة بالبيانات', details: data });
         }
       } catch (err) {
         log({ error: 'تعذر الاتصال بخادم السحابة: ' + err.message });
@@ -142,7 +147,6 @@
       }
     }
 
-    // جلب الألعاب تلقائياً عند تحميل الصفحة
     window.addEventListener('DOMContentLoaded', fetchGames);
   </script>
 </body>
