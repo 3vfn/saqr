@@ -1,6 +1,154 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="dark">
 <head>
+    <!-- أضف المكتبة الرسمية لـ Supabase عبر CDN في الـ head -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // 1. تهيئة Supabase Client للتحديثات اللحظية
+  const SUPABASE_URL = 'https://your-supabase-project.supabase.co'; // استبدل بـ URL مشروعك
+  const SUPABASE_ANON_KEY = 'your-anon-key';                       // استبدل بـ Key مشروعك
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let activeRoomChannel = null;
+
+  // 2. دالة الانضمام للغرفة وتفعيل قناة الاستماع اللحظي (Realtime Channel)
+  async function submitJoinRoom() {
+      const roomCode = document.getElementById('join-room-code').value.trim();
+      const playerName = document.getElementById('join-player-name').value.trim();
+      const feedback = document.getElementById('join-feedback');
+
+      if (!roomCode || !playerName) {
+          feedback.innerText = "أدخل الاسم وكود الغرفة كاملاً";
+          return;
+      }
+
+      try {
+          // الطلب يتم عبر Edge Worker لمعالجة البيانات والإدخال
+          const res = await fetch(`${API_BASE_URL}/api/rooms/join`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ room_code: roomCode, player_name: playerName })
+          });
+          const data = await res.json();
+
+          if (data.success) {
+              feedback.className = "text-xs font-bold text-emerald-400";
+              feedback.innerText = `تم الانضمام بنجاح!`;
+
+              // تحويل الواجهة لمحتوى الغرفة اللحظي
+              renderLobbyUI(data.room.id, data.room.room_code, data.player);
+
+              // تفعيل الـ Realtime Subscription للغرفة الحالية
+              subscribeToRoomUpdates(data.room.id);
+          } else {
+              feedback.innerText = data.message || "الغرفة غير موجودة";
+          }
+      } catch (err) {
+          feedback.innerText = "خطأ في الاتصال بالشبكة";
+      }
+  }
+
+  // 3. الاشتراك في التغييرات اللحظية لجدول room_players
+  function subscribeToRoomUpdates(roomId) {
+      // إلغاء أي اشتراك سابق إن وجد
+      if (activeRoomChannel) {
+          supabase.removeChannel(activeRoomChannel);
+      }
+
+      activeRoomChannel = supabase
+          .channel(`room-${roomId}`)
+          .on(
+              'postgres_changes',
+              {
+                  event: '*', // الاستماع لجميع التغييرات (INSERT, UPDATE, DELETE)
+                  schema: 'public',
+                  table: 'room_players',
+                  filter: `room_id=eq.${roomId}`
+              },
+              (payload) => {
+                  console.log('تغيير لحظي:', payload);
+
+                  if (payload.eventType === 'INSERT') {
+                      appendPlayerToList(payload.new);
+                  } else if (payload.eventType === 'UPDATE') {
+                      updatePlayerInList(payload.new);
+                  } else if (payload.eventType === 'DELETE') {
+                      removePlayerFromList(payload.old.id);
+                  }
+              }
+          )
+          .subscribe((status) => {
+              if (status === 'SUBSCRIBED') {
+                  console.log(`تم الاتصال بالقناة اللحظية للغرفة: ${roomId}`);
+              }
+          });
+  }
+
+  // 4. بناء واجهة انتظار اللاعبين (Lobby)
+  async function renderLobbyUI(roomId, roomCode, currentPlayer) {
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+          <div class="space-y-4 text-center">
+              <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                  <span class="text-xs text-slate-400 font-bold">كود الغرفة:</span>
+                  <span class="text-lg font-black text-amber-400 bg-slate-950 px-3 py-1 rounded-lg border border-amber-500/30">${roomCode}</span>
+              </div>
+
+              <h3 class="text-base font-bold text-slate-200">اللاعبون المتواجدون حالياً:</h3>
+
+              <div id="players-list" class="space-y-2 max-h-48 overflow-y-auto p-1">
+                  <div class="text-xs text-slate-500 py-2">جاري جلب القائمة...</div>
+              </div>
+          </div>
+      `;
+
+      // جلب القائمة الأولية للاعبين الموجودين بالفعل
+      const { data: players } = await supabase
+          .from('room_players')
+          .select('*')
+          .eq('room_id', roomId)
+          .order('joined_at', { ascending: true });
+
+      const listContainer = document.getElementById('players-list');
+      listContainer.innerHTML = '';
+      if (players) players.forEach(player => appendPlayerToList(player));
+  }
+
+  // 5. دوال تحديث عناصر الواجهة فور ورود الحدث من السحابة
+  function appendPlayerToList(player) {
+      const listContainer = document.getElementById('players-list');
+      if (!listContainer) return;
+
+      // منع التكرار
+      if (document.getElementById(`player-${player.id}`)) return;
+
+      const playerItem = document.createElement('div');
+      playerItem.id = `player-${player.id}`;
+      playerItem.className = "flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs font-bold text-slate-300 transition-all animate-fade-in";
+      playerItem.innerHTML = `
+          <span class="flex items-center gap-2">
+              <i class="fa-solid fa-user-ninja text-amber-500"></i>
+              ${player.player_name}
+          </span>
+          <span class="text-[10px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded-full">نقاط: ${player.score || 0}</span>
+      `;
+      listContainer.appendChild(playerItem);
+  }
+
+  function updatePlayerInList(player) {
+      const el = document.getElementById(`player-${player.id}`);
+      if (el) {
+          el.querySelector('span:last-child').innerText = `نقاط: ${player.score || 0}`;
+      }
+  }
+
+  function removePlayerFromList(playerId) {
+      const el = document.getElementById(`player-${playerId}`);
+      if (el) el.remove();
+  }
+</script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة صقر للألعاب الجماعية | Saqr Games</title>
