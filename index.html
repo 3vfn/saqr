@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة صقر للألعاب التفاعلية</title>
   <style>
-    body { font-family: system-ui, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 2rem; max-width: 800px; margin: 0 auto; }
+    body { font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 2rem; max-width: 800px; margin: 0 auto; }
     h1 { color: #38bdf8; text-align: center; }
     .card { background: #1e293b; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid #334155; }
-    button { background: #0284c7; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+    button { background: #0284c7; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; width: 100%; }
     button:hover { background: #0369a1; }
     input, select { padding: 0.75rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; width: 100%; box-sizing: border-box; margin-bottom: 1rem; }
     .game-item { background: #334155; padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; display: flex; justify-content: space-between; }
-    #log { background: #000; padding: 1rem; border-radius: 6px; color: #4ade80; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+    #log { background: #000; padding: 1rem; border-radius: 6px; color: #4ade80; font-family: monospace; white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto; }
   </style>
 </head>
 <body>
@@ -23,14 +23,16 @@
   <div class="card">
     <h2>الألعاب المتاحة</h2>
     <button onclick="fetchGames()">تحديث قائمة الألعاب</button>
-    <div id="games-list" style="margin-top: 1rem;"></div>
+    <div id="games-list" style="margin-top: 1rem;">في انتظار جلب الألعاب...</div>
   </div>
 
   <!-- 2. إنشاء غرفة -->
   <div class="card">
     <h2>إنشاء غرفة جديدة</h2>
     <input type="text" id="create-host" placeholder="اسم المستضيف (مثال: عبد العزيز)">
-    <input type="number" id="create-game-id" placeholder="رقم اللعبة (Game ID)">
+    <select id="create-game-id">
+      <option value="">اختر اللعبة...</option>
+    </select>
     <button onclick="handleCreateRoom()">إنشاء الغرفة</button>
   </div>
 
@@ -62,30 +64,37 @@
         const data = await res.json();
         log(data);
 
-        if (data.success) {
+        if (data.success && data.data) {
           const listDiv = document.getElementById('games-list');
+          const selectDiv = document.getElementById('create-game-id');
+          
           listDiv.innerHTML = '';
+          selectDiv.innerHTML = '<option value="">اختر اللعبة...</option>';
+
           data.data.forEach(game => {
+            // إضافة للقائمة
             listDiv.innerHTML += `
               <div class="game-item">
                 <span><b>#${game.id}</b> - ${game.title} (${game.category})</span>
                 <span>⭐ ${game.rating}</span>
               </div>
             `;
+            // إضافة للقائمة المنسدلة
+            selectDiv.innerHTML += `<option value="${game.id}">${game.title} (#${game.id})</option>`;
           });
         }
       } catch (err) {
-        log({ error: err.message });
+        log({ error: 'تعذر الاتصال بخادم السحابة: ' + err.message });
       }
     }
 
     // التعامل مع إنشاء الغرفة
     async function handleCreateRoom() {
-      const host_name = document.getElementById('create-host').value;
+      const host_name = document.getElementById('create-host').value.trim();
       const game_id = parseInt(document.getElementById('create-game-id').value);
 
       if (!host_name || !game_id) {
-        alert('يرجى تعبئة كافة الحقول');
+        alert('يرجى كتابة الاسم واختيار اللعبة');
         return;
       }
 
@@ -98,7 +107,9 @@
         const data = await res.json();
         log(data);
         if (data.success) {
-          alert(`تم إنشاء الغرفة! كود الغرفة: ${data.room.room_code}`);
+          alert(`تم إنشاء الغرفة بنجاح! كود الغرفة: ${data.room.room_code}`);
+        } else {
+          alert('خطأ: ' + (data.message || data.error));
         }
       } catch (err) {
         log({ error: err.message });
@@ -107,8 +118,8 @@
 
     // التعامل مع الانضمام لغرفة
     async function handleJoinRoom() {
-      const room_code = document.getElementById('join-code').value;
-      const player_name = document.getElementById('join-name').value;
+      const room_code = document.getElementById('join-code').value.trim();
+      const player_name = document.getElementById('join-name').value.trim();
 
       if (!room_code || !player_name) {
         alert('يرجى كتابة الاسم وكود الغرفة');
@@ -125,14 +136,16 @@
         log(data);
         if (data.success) {
           alert(`تم الانضمام بنجاح كـ: ${data.player.player_name}`);
+        } else {
+          alert('خطأ: ' + (data.message || data.error));
         }
       } catch (err) {
         log({ error: err.message });
       }
     }
 
-    // جلب الألعاب فور فتح الصفحة
-    fetchGames();
+    // جلب الألعاب تلقائياً عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', fetchGames);
   </script>
 </body>
 </html>
