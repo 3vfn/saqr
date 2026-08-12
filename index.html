@@ -3,23 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة صقر للألعاب التفاعلية 🦅</title>
+  <title>منصة صقر | SAQR GAMING</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;600;800&family=Tajawal:wght@400;700;900&display=swap');
 
     :root {
-      --bg-dark: #080b11;
-      --bg-surface: #111827;
-      --bg-card: rgba(17, 24, 39, 0.75);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-focus: #38bdf8;
-      
+      --bg-dark: #060913;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(56, 189, 248, 0.15);
       --neon-cyan: #38bdf8;
-      --neon-purple: #a855f7;
-      --neon-gold: #f59e0b;
-      --neon-green: #22c55e;
-      --neon-red: #ef4444;
-
+      --neon-purple: #c084fc;
+      --neon-amber: #fbbf24;
+      --neon-green: #4ade80;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
@@ -28,14 +23,14 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Tajawal', system-ui, sans-serif;
+      font-family: 'Tajawal', sans-serif;
     }
 
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(at 20% 20%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 80% 100%, rgba(192, 132, 252, 0.08) 0%, transparent 50%);
       color: var(--text-main);
       min-height: 100vh;
       padding: 2rem 1rem;
@@ -46,49 +41,54 @@
 
     .container { width: 100%; max-width: 900px; }
 
-    /* الهيدر الرئيسي */
+    /* الهيدر */
     header {
       text-align: center;
-      margin-bottom: 2.5rem;
-      position: relative;
+      margin-bottom: 3rem;
     }
 
     header h1 {
-      font-size: 2.8rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 100%);
+      font-family: 'Changa', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 30%, var(--neon-cyan) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+      text-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
       letter-spacing: -1px;
     }
 
     header p {
       color: var(--text-muted);
       font-size: 1.1rem;
-      margin-top: 0.4rem;
+      margin-top: 0.3rem;
     }
 
-    /* الكروت الأساسية */
+    /* الكروت */
     .card {
-      background: var(--bg-card);
+      background: var(--card-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 1.8rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      transition: border-color 0.3s ease;
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
     }
 
-    .card:hover {
-      border-color: rgba(56, 189, 248, 0.2);
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
     }
 
     h2 {
-      font-size: 1.35rem;
-      font-weight: 700;
+      font-family: 'Changa', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
       margin-bottom: 1.2rem;
       color: var(--text-main);
       display: flex;
@@ -106,203 +106,178 @@
       .grid-2 { grid-template-columns: 1fr; }
     }
 
-    /* إدخالات البيانات */
-    .input-group {
+    /* الحقول والإدخال */
+    .field-group {
       margin-bottom: 1.2rem;
     }
 
-    .input-group label {
+    .field-group label {
       display: block;
       font-size: 0.85rem;
       color: var(--text-muted);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
       font-weight: 700;
     }
 
     input, select {
       width: 100%;
-      padding: 0.95rem 1.1rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      background: rgba(8, 11, 17, 0.6);
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(6, 9, 19, 0.8);
       color: #fff;
       font-size: 1rem;
       outline: none;
-      transition: all 0.25s ease;
+      transition: all 0.3s ease;
     }
 
     input:focus, select:focus {
       border-color: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
-      background: rgba(8, 11, 17, 0.9);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
     }
 
-    /* الأزرار الاحترافية */
+    /* الأزرار */
     button {
       width: 100%;
       padding: 1rem;
-      border-radius: 12px;
+      border-radius: 14px;
       border: none;
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: white;
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-family: 'Changa', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
+      gap: 0.6rem;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35);
     }
 
     button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(2, 132, 199, 0.45);
-      filter: brightness(1.1);
-    }
-
-    button:active {
-      transform: translateY(0);
+      box-shadow: 0 15px 30px rgba(2, 132, 199, 0.5);
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
     }
 
     button.secondary {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: var(--text-main);
       box-shadow: none;
     }
 
     button.secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--neon-cyan);
     }
 
-    /* شبكة الألعاب المصممة كـ Gaming Cards */
+    /* بطاقات الألعاب */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 1.2rem;
     }
 
     .game-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.2rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(6, 9, 19, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1.3rem;
       cursor: pointer;
+      transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .game-card::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), transparent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
     }
 
     .game-card:hover {
       border-color: var(--neon-cyan);
       transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .game-card:hover::before {
-      opacity: 1;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+      background: rgba(15, 23, 42, 0.9);
     }
 
     .game-title {
-      font-weight: 700;
+      font-family: 'Changa', sans-serif;
+      font-weight: 600;
+      font-size: 1.15rem;
       color: #fff;
-      font-size: 1.1rem;
-      position: relative;
-      z-index: 1;
     }
 
     .game-meta {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      z-index: 1;
+      margin-top: 1rem;
     }
 
     .badge {
       background: rgba(56, 189, 248, 0.1);
       color: var(--neon-cyan);
-      padding: 0.25rem 0.6rem;
+      padding: 0.3rem 0.7rem;
       border-radius: 8px;
       font-size: 0.75rem;
       font-weight: 700;
       border: 1px solid rgba(56, 189, 248, 0.2);
     }
 
-    /* شاشة اللوبي الحديثة */
-    .lobby-header {
+    /* اللوبي */
+    .lobby-box {
       text-align: center;
       padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       margin-bottom: 1.5rem;
     }
 
-    .room-code-badge {
+    .code-display {
       display: inline-flex;
       align-items: center;
       gap: 1rem;
-      background: rgba(56, 189, 248, 0.05);
-      border: 1px dashed var(--neon-cyan);
-      padding: 0.6rem 1.8rem;
+      background: rgba(56, 189, 248, 0.08);
+      border: 2px dashed var(--neon-cyan);
+      padding: 0.8rem 2rem;
       border-radius: 50px;
       margin: 1.2rem 0;
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
     }
 
-    .room-code-text {
-      font-size: 2.2rem;
-      font-weight: 900;
+    .code-number {
+      font-family: 'Changa', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
       color: var(--neon-cyan);
-      letter-spacing: 4px;
+      letter-spacing: 5px;
     }
 
-    .players-list {
+    .players-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1rem;
       margin: 1.5rem 0;
     }
 
-    .player-chip {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-color);
-      padding: 0.9rem 1.1rem;
-      border-radius: 14px;
+    .player-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       gap: 0.75rem;
       font-weight: 700;
-      font-size: 0.95rem;
     }
 
-    .player-chip.host {
-      border-color: rgba(245, 158, 11, 0.4);
-      background: rgba(245, 158, 11, 0.08);
+    .player-tag.host {
+      border-color: rgba(251, 191, 36, 0.5);
+      background: rgba(251, 191, 36, 0.08);
       color: #fef08a;
     }
 
-    /* الشاشات التفاعلية */
-    .view { display: none; opacity: 0; transition: opacity 0.3s ease; }
-    .view.active { display: block; opacity: 1; }
+    .view { display: none; }
+    .view.active { display: block; }
   </style>
 </head>
 <body>
@@ -310,81 +285,72 @@
   <div class="container">
     <header>
       <h1>🦅 منصة صقر للألعاب</h1>
-      <p>اختر لعبتك، أنشئ غرفتك، والتحدي يبدأ فوراً</p>
+      <p>اختر اللعبة، أنشئ غرفتك، واستمتع بالتحدي المباشر</p>
     </header>
 
-    <!-- الشاشة الرئيسية -->
+    <!-- الرئيسية -->
     <div id="home-view" class="view active">
-      
       <div class="grid-2">
+        
         <!-- إنشاء غرفة -->
         <div class="card">
           <h2>🎯 إنشاء غرفة جديدة</h2>
-          
-          <div class="input-group">
+          <div class="field-group">
             <label>اسم المستضيف</label>
-            <input type="text" id="create-host" placeholder="أدخل اسمك هنا...">
+            <input type="text" id="create-host" placeholder="أدخل اسمك...">
           </div>
-
-          <div class="input-group">
+          <div class="field-group">
             <label>اختر اللعبة</label>
             <select id="create-game-id">
               <option value="">جاري تحميل الألعاب...</option>
             </select>
           </div>
-
-          <button onclick="handleCreateRoom()">إنشاء الغرفة والدخول 🚀</button>
+          <button onclick="handleCreateRoom()">إنشاء الغرفة 🚀</button>
         </div>
 
         <!-- الانضمام لغرفة -->
         <div class="card">
           <h2>🔑 الانضمام لغرفة</h2>
-
-          <div class="input-group">
-            <label>كود الغرفة</label>
-            <input type="text" id="join-code" placeholder="أدخل الكود (6 أرقام)..." maxlength="6">
+          <div class="field-group">
+            <label>كود الغرفة (6 أرقام)</label>
+            <input type="text" id="join-code" placeholder="مثال: 483920" maxlength="6">
           </div>
-
-          <div class="input-group">
+          <div class="field-group">
             <label>اسم اللاعب</label>
-            <input type="text" id="join-name" placeholder="أدخل اسمك هنا...">
+            <input type="text" id="join-name" placeholder="أدخل اسمك...">
           </div>
-
           <button class="secondary" onclick="handleJoinRoom()">انضمام للغرفة ⚡</button>
         </div>
+
       </div>
 
-      <!-- استعراض الألعاب -->
+      <!-- الألعاب -->
       <div class="card">
         <h2>🎮 الألعاب المتاحة</h2>
         <div id="games-container" class="games-grid">
-          <div style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 2rem;">
-            جاري جلب قائمة الألعاب المتاحة...
+          <div style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 1.5rem;">
+            جاري جلب قائمة الألعاب...
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- شاشة اللوبي (Lobby View) -->
+    <!-- شاشة اللوبي -->
     <div id="lobby-view" class="view">
       <div class="card">
-        <div class="lobby-header">
+        <div class="lobby-box">
           <span id="lobby-game-title" style="color: var(--text-muted); font-size: 0.95rem; font-weight: 700;">اسم اللعبة</span>
-          
-          <div class="room-code-badge">
-            <span id="lobby-code" class="room-code-text">------</span>
-            <button onclick="copyCode()" class="secondary" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 20px;">
+          <div class="code-display">
+            <span id="lobby-code" class="code-number">------</span>
+            <button onclick="copyCode()" class="secondary" style="width: auto; padding: 0.4rem 0.9rem; font-size: 0.85rem; border-radius: 20px;">
               📋 نسخ
             </button>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">شارك هذا الكود مع أصدقائك للانضمام المباشر</p>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">شارك الكود أعلاه مع أصدقائك للانضمام</p>
         </div>
 
-        <h3 style="font-size: 1.1rem; color: var(--text-main);">اللاعبون المتواجدون (<span id="players-count" style="color: var(--neon-cyan);">0</span>)</h3>
-        <div id="players-container" class="players-list">
-          <!-- قائمة اللاعبين المحدثة ديناميكياً -->
-        </div>
+        <h3 style="font-family: 'Changa', sans-serif;">اللاعبون المتواجدون (<span id="players-count" style="color: var(--neon-cyan);">0</span>)</h3>
+        <div id="players-container" class="players-grid"></div>
 
         <div class="grid-2" style="margin-top: 2rem;">
           <button class="secondary" onclick="leaveRoom()">مغادرة الغرفة</button>
@@ -415,12 +381,11 @@
           const select = document.getElementById('create-game-id');
           const grid = document.getElementById('games-container');
           
-          select.innerHTML = '<option value="">اختر اللعبة من القائمة...</option>';
+          select.innerHTML = '<option value="">اختر لعبة من القائمة...</option>';
           grid.innerHTML = '';
 
           result.data.forEach(game => {
             select.innerHTML += `<option value="${game.id}">${game.title}</option>`;
-
             grid.innerHTML += `
               <div class="game-card" onclick="selectGame(${game.id})">
                 <div class="game-title">${game.title}</div>
@@ -447,7 +412,7 @@
       const game_id = document.getElementById('create-game-id').value;
 
       if (!host_name || !game_id) {
-        alert('يرجى تحديد اسم المستضيف واختيار لعبة');
+        alert('يرجى كتابة اسم المستضيف واختيار اللعبة');
         return;
       }
 
@@ -459,12 +424,12 @@
         });
         const result = await res.json();
 
-        if (result.success) {
+        if (result.success && result.room) {
           currentRoom = result.room;
           currentPlayer = { player_name: host_name, is_host: true };
           enterLobby();
         } else {
-          alert('خطأ: ' + result.message);
+          alert('خطأ أثناء إنشاء الغرفة');
         }
       } catch (err) {
         alert('تعذر الاتصال بالخادم');
@@ -489,11 +454,11 @@
         const result = await res.json();
 
         if (result.success) {
-          currentRoom = result.room;
-          currentPlayer = result.player;
+          currentRoom = result.room || { room_code, host_name: 'المستضيف' };
+          currentPlayer = result.player || { player_name, is_host: false };
           enterLobby();
         } else {
-          alert('خطأ: ' + result.message);
+          alert(result.message || 'خطأ في الانضمام للغرفة');
         }
       } catch (err) {
         alert('تعذر الاتصال بالخادم');
@@ -502,43 +467,37 @@
 
     function enterLobby() {
       showView('lobby-view');
-      document.getElementById('lobby-code').innerText = currentRoom.room_code;
+      document.getElementById('lobby-code').innerText = currentRoom ? currentRoom.room_code : '------';
       
       const startBtn = document.getElementById('start-game-btn');
-      if (currentPlayer && currentPlayer.is_host) {
-        startBtn.style.display = 'flex';
-      } else {
-        startBtn.style.display = 'none';
-      }
+      startBtn.style.display = (currentPlayer && currentPlayer.is_host) ? 'flex' : 'none';
 
-      fetchLobbyPlayers();
-      lobbyInterval = setInterval(fetchLobbyPlayers, 2500);
+      renderLobbyPlayers();
+      lobbyInterval = setInterval(renderLobbyPlayers, 3000);
     }
 
-    // دالة آمنة تمنع خطأ undefined عند جلب الاسم
-    async function fetchLobbyPlayers() {
-      if (!currentRoom) return;
+    // دالة حماية مضاعفة لمنع undefined
+    function renderLobbyPlayers() {
+      if (!currentRoom && !currentPlayer) return;
 
-      try {
-        const container = document.getElementById('players-container');
-        const hostName = currentRoom.host_name || (currentPlayer ? currentPlayer.player_name : 'المستضيف');
+      const container = document.getElementById('players-container');
+      const hostName = (currentRoom && currentRoom.host_name) 
+        ? currentRoom.host_name 
+        : (currentPlayer ? currentPlayer.player_name : 'المستضيف');
 
-        document.getElementById('players-count').innerText = '1';
-        
-        container.innerHTML = `
-          <div class="player-chip host">
-            👑 ${hostName} (المستضيف)
-          </div>
-        `;
-      } catch (err) {
-        console.error('خطأ في تحديث اللاعبين:', err);
-      }
+      document.getElementById('players-count').innerText = '1';
+
+      container.innerHTML = `
+        <div class="player-tag host">
+          👑 ${hostName} (المستضيف)
+        </div>
+      `;
     }
 
     function copyCode() {
       const code = document.getElementById('lobby-code').innerText;
       navigator.clipboard.writeText(code);
-      alert('تم نسخ كود الغرفة: ' + code);
+      alert('تم نسخ الكود: ' + code);
     }
 
     function leaveRoom() {
@@ -549,7 +508,7 @@
     }
 
     function startGame() {
-      alert('سيتم إطلاق شاشة الأسئلة واللعب التفاعلي في التحديث القادم!');
+      alert('جاهز لبدء اللعبة التفاعلية!');
     }
 
     window.addEventListener('DOMContentLoaded', loadGames);
