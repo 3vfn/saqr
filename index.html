@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة صقر كيو | Saqr Q - المنصة العربية الأولى للألعاب التفاعلية</title>
+    <title>منصة صقر | Saqr - المنصة العربية الأولى للألعاب والفقرات التفاعلية</title>
+
+    <!-- PWA & Open Graph -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0f172a">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta property="og:title" content="منصة صقر | Saqr Platform">
+    <meta property="og:description" content="المنصة العربية الأولى للألعاب والفقرات التفاعلية لصناع المحتوى والفعاليات.">
+    <meta property="og:type" content="website">
+
+    <!-- CDNs (Font Awesome 6.4.0 & TailwindCSS) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
@@ -17,8 +24,8 @@
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-feather-pointed text-3xl text-amber-500"></i>
                 <div class="flex flex-col">
-                    <span class="text-2xl font-black tracking-wide bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">صقر كيو</span>
-                    <span class="text-[10px] text-slate-400 -mt-1 font-semibold">SAQR Q PLATFORM</span>
+                    <span class="text-2xl font-black tracking-wide bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">صقر</span>
+                    <span class="text-[10px] text-slate-400 -mt-1 font-semibold">SAQR PLATFORM</span>
                 </div>
             </div>
 
@@ -51,7 +58,7 @@
                 <span class="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 bg-clip-text text-transparent">للألعاب والفقرات التفاعلية</span>
             </h1>
             <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                سواء كنت صانع محتوى على تيك توك، تدير جلسات في برامج صوتية، تنظم تجمعات وفعاليات عائلية، أو ببساطة تبحث عن التسلية الفردية بألعاب مجانية؛ منصة <strong class="text-amber-400">صقر كيو</strong> هي خيارك الأمثل لزيادة التفاعل وبث الحماس!
+                سواء كنت صانع محتوى على تيك توك، تدير جلسات في برامج صوتية، تنظم تجمعات وفعاليات عائلية، أو ببساطة تبحث عن التسلية الفردية بألعاب مجانية؛ منصة <strong class="text-amber-400">صقر</strong> هي خيارك الأمثل لزيادة التفاعل وبث الحماس!
             </p>
             <div class="flex flex-wrap justify-center gap-4 pt-4">
                 <a href="#games" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2">
@@ -63,7 +70,7 @@
             </div>
         </div>
 
-        <!-- أرقام وإحصائيات -->
+        <!-- الإحصائيات -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
             <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-center">
                 <div class="text-2xl sm:text-3xl font-black text-amber-400">+1,500</div>
@@ -84,21 +91,19 @@
         </div>
     </section>
 
-    <!-- معرض الألعاب المباشر مع الربط السحابي -->
+    <!-- معرض الألعاب المباشر -->
     <section id="games" class="py-12 bg-slate-900/30 border-y border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-100">معرض الألعاب والغرف التفاعلية المباشر</h2>
-                    <p class="text-slate-400 text-sm mt-1">استكشف الألعاب الحماسية والغرف النشطة التي يديرها صناع المحتوى الآن على منصة صقر كيو.</p>
-                </div>
+            <div class="mb-8">
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-100">معرض الألعاب والغرف التفاعلية المباشر</h2>
+                <p class="text-slate-400 text-sm mt-1">استكشف الألعاب الحماسية والغرف النشطة التي يديرها صناع المحتوى الآن على منصة صقر.</p>
             </div>
 
-            <!-- قائمة الألعاب الديناميكية الجالبة من Cloudflare Worker -->
+            <!-- الحاوية الديناميكية للجلب سحابياً -->
             <div id="games-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="col-span-full text-center py-12 text-slate-400 animate-pulse">
                     <i class="fa-solid fa-spinner fa-spin text-3xl text-amber-500 mb-3"></i>
-                    <p>جاري تحميل ألعاب منصة صقر كيو سحابياً...</p>
+                    <p>جاري تحميل ألعاب منصة صقر سحابياً...</p>
                 </div>
             </div>
         </div>
@@ -108,7 +113,7 @@
     <section class="py-16 max-w-7xl mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-black">أقسام الألعاب الرئيسية</h2>
-            <p class="text-slate-400 text-sm mt-2">قمنا بتقسيم الألعاب إلى أربعة أقسام مستقلة لتناسب جميع الاحتياجات والفعاليات بشكل واضح ومبسط.</p>
+            <p class="text-slate-400 text-sm mt-2">قمنا بتقسيم الألعاب إلى أربعة أقسام مستقلة لتناسب جميع الاحتياجات والفعاليات.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -116,16 +121,16 @@
                 <div>
                     <span class="text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full">مجانية بالكامل</span>
                     <h3 class="text-xl font-bold mt-4 mb-2">الألعاب المجانية</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">ألعاب ترفيهية خفيفة وسريعة لا تحتاج إلى اشتراك أو كود تفعيل. العبها بمفردك أو مع أصدقائك في أي وقت.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">ألعاب ترفيهية خفيفة وسريعة لا تحتاج إلى اشتراك أو كود تفعيل.</p>
                 </div>
                 <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
             </div>
 
-            <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+            <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-6 flex flex-col justify-between">
                 <div>
-                    <span class="text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full">باقة صقر كيو بلس</span>
-                    <h3 class="text-xl font-bold mt-4 mb-2">باقة صقر كيو بلس (Q+)</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">باقة حصرية تضم أقوى الألعاب الجماعية المصممة لإنشاء مسابقات وتحديات كبرى لصناع المحتوى.</p>
+                    <span class="text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full">باقة صقر بلس</span>
+                    <h3 class="text-xl font-bold mt-4 mb-2">باقة صقر بلس (Saqr+)</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">باقة حصرية تضم أقوى الألعاب الجماعية المصممة للمسابقات والتحديات الكبرى.</p>
                 </div>
                 <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
             </div>
@@ -134,7 +139,7 @@
                 <div>
                     <span class="text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full">ربط مباشر بالشات</span>
                     <h3 class="text-xl font-bold mt-4 mb-2">ألعاب البث المباشر</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">اربط اللعبة ببثك المباشر (تيك توك، تويتش، كيك) ودع المشاهدين يلعبون تلقائياً عبر الشات.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">اربط اللعبة ببثك المباشر ودع المشاهدين يلعبون تلقائياً عبر الشات.</p>
                 </div>
                 <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
             </div>
@@ -143,7 +148,7 @@
                 <div>
                     <span class="text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 px-3 py-1 rounded-full">بنك أسئلة متكامل</span>
                     <h3 class="text-xl font-bold mt-4 mb-2">موسوعة الأسئلة</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">أضخم بنك أسئلة ثقافية وتحديات فكرية مصنف ومحدث باستمرار لبث التنافس بمرونة وسهولة.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">أضخم بنك أسئلة ثقافية وتحديات فكرية مصنف ومحدث باستمرار.</p>
                 </div>
                 <button class="mt-6 text-xs text-amber-400 font-bold flex items-center gap-2 hover:gap-3 transition-all">استكشف ألعاب القسم <i class="fa-solid fa-arrow-left"></i></button>
             </div>
@@ -156,10 +161,10 @@
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-feather-pointed text-2xl text-amber-500"></i>
-                    <span class="text-xl font-black text-amber-400">صقر كيو</span>
+                    <span class="text-xl font-black text-amber-400">صقر</span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    موقع صقر كيو (Saqr Q) هو المنصة العربية الأولى في تقديم ألعاب تفاعلية مخصصة لصناع المحتوى ومقدمين البثوث. أنشئ غرفتك الآن وابدأ المرح!
+                    منصة صقر (Saqr) هي المنصة العربية الأولى في تقديم ألعاب تفاعلية مخصصة لصناع المحتوى ومقدمين البثوث. أنشئ غرفتك الآن وابدأ المرح!
                 </p>
             </div>
 
@@ -195,11 +200,11 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 border-t border-slate-800/60 mt-8 pt-6 text-center text-xs text-slate-500">
-            <p>جميع الحقوق محفوظة &copy; 2026 - **منصة صقر كيو (Saqr Q Platform)**</p>
+            <p>جميع الحقوق محفوظة &copy; 2026 - **منصة صقر (Saqr Platform)**</p>
         </div>
     </footer>
 
-    <!-- السكربت المسؤول عن جلب البيانات من Cloudflare Worker -->
+    <!-- سكربت جلب البيانات من Cloudflare Worker -->
     <script>
         const API_URL = 'https://saqrr.sindazon.workers.dev/api/games';
 
@@ -231,7 +236,7 @@
                     container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">لا توجد ألعاب متوفرة حالياً.</p>`;
                 }
             } catch (err) {
-                container.innerHTML = `<p class="col-span-full text-center text-rose-400 py-8">حدث خطأ أثناء تحميل ألعاب منصة صقر كيو: ${err.message}</p>`;
+                container.innerHTML = `<p class="col-span-full text-center text-rose-400 py-8">حدث خطأ أثناء تحميل ألعاب منصة صقر: ${err.message}</p>`;
             }
         }
 
