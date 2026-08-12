@@ -1,360 +1,138 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark">
+<html lang="ar" dir="rtl">
 <head>
-    <!-- أضف المكتبة الرسمية لـ Supabase عبر CDN في الـ head -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة صقر للألعاب التفاعلية</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 2rem; max-width: 800px; margin: 0 auto; }
+    h1 { color: #38bdf8; text-align: center; }
+    .card { background: #1e293b; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid #334155; }
+    button { background: #0284c7; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+    button:hover { background: #0369a1; }
+    input, select { padding: 0.75rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; width: 100%; box-sizing: border-box; margin-bottom: 1rem; }
+    .game-item { background: #334155; padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; display: flex; justify-content: space-between; }
+    #log { background: #000; padding: 1rem; border-radius: 6px; color: #4ade80; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+  </style>
+</head>
+<body>
 
-<script>
-  // 1. تهيئة Supabase Client للتحديثات اللحظية
-  const SUPABASE_URL = 'https://your-supabase-project.supabase.co'; // استبدل بـ URL مشروعك
-  const SUPABASE_ANON_KEY = 'your-anon-key';                       // استبدل بـ Key مشروعك
+  <h1>🦅 منصة صقر للألعاب</h1>
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  let activeRoomChannel = null;
+  <!-- 1. قائمة الألعاب -->
+  <div class="card">
+    <h2>الألعاب المتاحة</h2>
+    <button onclick="fetchGames()">تحديث قائمة الألعاب</button>
+    <div id="games-list" style="margin-top: 1rem;"></div>
+  </div>
 
-  // 2. دالة الانضمام للغرفة وتفعيل قناة الاستماع اللحظي (Realtime Channel)
-  async function submitJoinRoom() {
-      const roomCode = document.getElementById('join-room-code').value.trim();
-      const playerName = document.getElementById('join-player-name').value.trim();
-      const feedback = document.getElementById('join-feedback');
+  <!-- 2. إنشاء غرفة -->
+  <div class="card">
+    <h2>إنشاء غرفة جديدة</h2>
+    <input type="text" id="create-host" placeholder="اسم المستضيف (مثال: عبد العزيز)">
+    <input type="number" id="create-game-id" placeholder="رقم اللعبة (Game ID)">
+    <button onclick="handleCreateRoom()">إنشاء الغرفة</button>
+  </div>
 
-      if (!roomCode || !playerName) {
-          feedback.innerText = "أدخل الاسم وكود الغرفة كاملاً";
-          return;
+  <!-- 3. الانضمام لغرفة -->
+  <div class="card">
+    <h2>الانضمام لغرفة</h2>
+    <input type="text" id="join-code" placeholder="كود الغرفة المكون من 6 أرقام">
+    <input type="text" id="join-name" placeholder="اسمك">
+    <button onclick="handleJoinRoom()">انضمام</button>
+  </div>
+
+  <!-- سجل الاستجابات -->
+  <div class="card">
+    <h2>سجل الاستجابة (API Output)</h2>
+    <div id="log">في انتظار الأوامر...</div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://saqrr.sindazon.workers.dev';
+
+    function log(data) {
+      document.getElementById('log').innerText = JSON.stringify(data, null, 2);
+    }
+
+    // جلب قائمة الألعاب
+    async function fetchGames() {
+      try {
+        const res = await fetch(`${API_BASE}/api/games`);
+        const data = await res.json();
+        log(data);
+
+        if (data.success) {
+          const listDiv = document.getElementById('games-list');
+          listDiv.innerHTML = '';
+          data.data.forEach(game => {
+            listDiv.innerHTML += `
+              <div class="game-item">
+                <span><b>#${game.id}</b> - ${game.title} (${game.category})</span>
+                <span>⭐ ${game.rating}</span>
+              </div>
+            `;
+          });
+        }
+      } catch (err) {
+        log({ error: err.message });
+      }
+    }
+
+    // التعامل مع إنشاء الغرفة
+    async function handleCreateRoom() {
+      const host_name = document.getElementById('create-host').value;
+      const game_id = parseInt(document.getElementById('create-game-id').value);
+
+      if (!host_name || !game_id) {
+        alert('يرجى تعبئة كافة الحقول');
+        return;
       }
 
       try {
-          // الطلب يتم عبر Edge Worker لمعالجة البيانات والإدخال
-          const res = await fetch(`${API_BASE_URL}/api/rooms/join`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ room_code: roomCode, player_name: playerName })
-          });
-          const data = await res.json();
-
-          if (data.success) {
-              feedback.className = "text-xs font-bold text-emerald-400";
-              feedback.innerText = `تم الانضمام بنجاح!`;
-
-              // تحويل الواجهة لمحتوى الغرفة اللحظي
-              renderLobbyUI(data.room.id, data.room.room_code, data.player);
-
-              // تفعيل الـ Realtime Subscription للغرفة الحالية
-              subscribeToRoomUpdates(data.room.id);
-          } else {
-              feedback.innerText = data.message || "الغرفة غير موجودة";
-          }
+        const res = await fetch(`${API_BASE}/api/rooms/create`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ game_id, host_name })
+        });
+        const data = await res.json();
+        log(data);
+        if (data.success) {
+          alert(`تم إنشاء الغرفة! كود الغرفة: ${data.room.room_code}`);
+        }
       } catch (err) {
-          feedback.innerText = "خطأ في الاتصال بالشبكة";
+        log({ error: err.message });
       }
-  }
+    }
 
-  // 3. الاشتراك في التغييرات اللحظية لجدول room_players
-  function subscribeToRoomUpdates(roomId) {
-      // إلغاء أي اشتراك سابق إن وجد
-      if (activeRoomChannel) {
-          supabase.removeChannel(activeRoomChannel);
+    // التعامل مع الانضمام لغرفة
+    async function handleJoinRoom() {
+      const room_code = document.getElementById('join-code').value;
+      const player_name = document.getElementById('join-name').value;
+
+      if (!room_code || !player_name) {
+        alert('يرجى كتابة الاسم وكود الغرفة');
+        return;
       }
 
-      activeRoomChannel = supabase
-          .channel(`room-${roomId}`)
-          .on(
-              'postgres_changes',
-              {
-                  event: '*', // الاستماع لجميع التغييرات (INSERT, UPDATE, DELETE)
-                  schema: 'public',
-                  table: 'room_players',
-                  filter: `room_id=eq.${roomId}`
-              },
-              (payload) => {
-                  console.log('تغيير لحظي:', payload);
-
-                  if (payload.eventType === 'INSERT') {
-                      appendPlayerToList(payload.new);
-                  } else if (payload.eventType === 'UPDATE') {
-                      updatePlayerInList(payload.new);
-                  } else if (payload.eventType === 'DELETE') {
-                      removePlayerFromList(payload.old.id);
-                  }
-              }
-          )
-          .subscribe((status) => {
-              if (status === 'SUBSCRIBED') {
-                  console.log(`تم الاتصال بالقناة اللحظية للغرفة: ${roomId}`);
-              }
-          });
-  }
-
-  // 4. بناء واجهة انتظار اللاعبين (Lobby)
-  async function renderLobbyUI(roomId, roomCode, currentPlayer) {
-      const modalContent = document.getElementById('modal-content');
-      modalContent.innerHTML = `
-          <div class="space-y-4 text-center">
-              <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                  <span class="text-xs text-slate-400 font-bold">كود الغرفة:</span>
-                  <span class="text-lg font-black text-amber-400 bg-slate-950 px-3 py-1 rounded-lg border border-amber-500/30">${roomCode}</span>
-              </div>
-
-              <h3 class="text-base font-bold text-slate-200">اللاعبون المتواجدون حالياً:</h3>
-
-              <div id="players-list" class="space-y-2 max-h-48 overflow-y-auto p-1">
-                  <div class="text-xs text-slate-500 py-2">جاري جلب القائمة...</div>
-              </div>
-          </div>
-      `;
-
-      // جلب القائمة الأولية للاعبين الموجودين بالفعل
-      const { data: players } = await supabase
-          .from('room_players')
-          .select('*')
-          .eq('room_id', roomId)
-          .order('joined_at', { ascending: true });
-
-      const listContainer = document.getElementById('players-list');
-      listContainer.innerHTML = '';
-      if (players) players.forEach(player => appendPlayerToList(player));
-  }
-
-  // 5. دوال تحديث عناصر الواجهة فور ورود الحدث من السحابة
-  function appendPlayerToList(player) {
-      const listContainer = document.getElementById('players-list');
-      if (!listContainer) return;
-
-      // منع التكرار
-      if (document.getElementById(`player-${player.id}`)) return;
-
-      const playerItem = document.createElement('div');
-      playerItem.id = `player-${player.id}`;
-      playerItem.className = "flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs font-bold text-slate-300 transition-all animate-fade-in";
-      playerItem.innerHTML = `
-          <span class="flex items-center gap-2">
-              <i class="fa-solid fa-user-ninja text-amber-500"></i>
-              ${player.player_name}
-          </span>
-          <span class="text-[10px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded-full">نقاط: ${player.score || 0}</span>
-      `;
-      listContainer.appendChild(playerItem);
-  }
-
-  function updatePlayerInList(player) {
-      const el = document.getElementById(`player-${player.id}`);
-      if (el) {
-          el.querySelector('span:last-child').innerText = `نقاط: ${player.score || 0}`;
+      try {
+        const res = await fetch(`${API_BASE}/api/rooms/join`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ room_code, player_name })
+        });
+        const data = await res.json();
+        log(data);
+        if (data.success) {
+          alert(`تم الانضمام بنجاح كـ: ${data.player.player_name}`);
+        }
+      } catch (err) {
+        log({ error: err.message });
       }
-  }
+    }
 
-  function removePlayerFromList(playerId) {
-      const el = document.getElementById(`player-${playerId}`);
-      if (el) el.remove();
-  }
-</script>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة صقر للألعاب الجماعية | Saqr Games</title>
-
-    <!-- Open Graph Metadata -->
-    <meta property="og:title" content="منصة صقر للألعاب الجماعية">
-    <meta property="og:description" content="تحدّ أصدقاءك في غرف لعب تفاعلية مباشرة عبر السحابة.">
-    <meta property="og:image" content="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/gamepad.svg">
-    <meta property="og:type" content="website">
-
-    <!-- PWA Configurations -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#020617">
-
-    <!-- CDN Dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
-
-    <!-- Header -->
-    <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20">
-                    <i class="fa-solid fa-gamepad"></i>
-                </div>
-                <span class="font-black text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">صقر</span>
-            </div>
-            <button onclick="openRoomCodeModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-door-open"></i> دخول كود غرفة
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
-        <section class="text-center space-y-3 py-6">
-            <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">منصة الألعاب التفاعلية</h1>
-            <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto font-medium">اختر لعبتك المفضلة، أنشئ غرفتك الخاصة، وادعُ أصدقاءك للتحدي فوراً.</p>
-        </section>
-
-        <!-- Games Grid -->
-        <div id="games-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="col-span-full text-center py-12 text-slate-500">
-                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-amber-500 mb-2"></i>
-                <p class="text-xs">جاري تحميل الألعاب من السحابة...</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- Modal Container -->
-    <div id="game-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
-            <button onclick="closeGameModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-200">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div id="modal-content"></div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
-        <p>© 2026 منصة صقر — بنية برمجية سحابية بالكامل بدون سيرفرات تقليدية</p>
-    </footer>
-
-    <!-- App Scripts -->
-    <script>
-        const API_BASE_URL = 'https://saqr-api.your-subdomain.workers.dev'; // استبدله برابط الـ Worker الخاص بك
-
-        document.addEventListener('DOMContentLoaded', fetchGames);
-
-        async function fetchGames() {
-            const container = document.getElementById('games-container');
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/games`);
-                const result = await res.json();
-
-                if (result.success && result.data.length > 0) {
-                    container.innerHTML = result.data.map(game => `
-                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-amber-500/50 transition-all">
-                            <div class="space-y-3">
-                                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl">
-                                    <i class="${game.icon_class || 'fa-solid fa-trophy'}"></i>
-                                </div>
-                                <h3 class="text-lg font-bold text-slate-100">${game.title}</h3>
-                                <p class="text-xs text-slate-400 line-clamp-2">${game.description || 'لعبة جماعية ممتازة للمنافسة المباشرة.'}</p>
-                            </div>
-                            <button onclick="openCreateRoomModal('${game.id}', '${game.title}')" class="mt-6 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-2.5 rounded-xl text-xs hover:brightness-110 transition-all cursor-pointer">
-                                إنشاء غرفة جديدة
-                            </button>
-                        </div>
-                    `).join('');
-                } else {
-                    container.innerHTML = `<p class="col-span-full text-center text-slate-500 text-xs">لا توجد ألعاب متاحة حالياً.</p>`;
-                }
-            } catch (err) {
-                container.innerHTML = `<p class="col-span-full text-center text-rose-400 text-xs">تعذر الاتصال بخادم السحابة.</p>`;
-            }
-        }
-
-        function openRoomCodeModal() {
-            const content = document.getElementById('modal-content');
-            content.innerHTML = `
-                <div class="space-y-4 text-center">
-                    <i class="fa-solid fa-key text-4xl text-amber-500"></i>
-                    <h3 class="text-xl font-black text-slate-100">الانضمام لغرفة</h3>
-                    <input id="join-player-name" type="text" placeholder="اسم اللاعب" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl py-2.5 text-slate-200 focus:border-amber-500 outline-none">
-                    <input id="join-room-code" type="text" maxlength="6" placeholder="كود الغرفة (6 أرقام)" class="w-full text-center text-lg tracking-widest font-black bg-slate-950 border border-slate-700 rounded-xl py-2.5 text-amber-400 focus:border-amber-500 outline-none">
-                    <div id="join-feedback" class="text-xs text-rose-400 min-h-[16px]"></div>
-                    <button onclick="submitJoinRoom()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-3 rounded-xl text-xs cursor-pointer">
-                        دخول الغرفة
-                    </button>
-                </div>
-            `;
-            document.getElementById('game-modal').classList.remove('hidden');
-        }
-
-        function openCreateRoomModal(gameId, gameTitle) {
-            const content = document.getElementById('modal-content');
-            content.innerHTML = `
-                <div class="space-y-4 text-center">
-                    <i class="fa-solid fa-plus-circle text-4xl text-amber-500"></i>
-                    <h3 class="text-xl font-black text-slate-100">غرفة جديدة: ${gameTitle}</h3>
-                    <input id="create-host-name" type="text" placeholder="اسمك (المستضيف)" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl py-2.5 text-slate-200 focus:border-amber-500 outline-none">
-                    <div id="create-feedback" class="text-xs text-rose-400 min-h-[16px]"></div>
-                    <button onclick="submitCreateRoom('${gameId}')" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-3 rounded-xl text-xs cursor-pointer">
-                        إنشاء كود الغرفة
-                    </button>
-                </div>
-            `;
-            document.getElementById('game-modal').classList.remove('hidden');
-        }
-
-        async function submitCreateRoom(gameId) {
-            const hostName = document.getElementById('create-host-name').value.trim();
-            const feedback = document.getElementById('create-feedback');
-
-            if (!hostName) {
-                feedback.innerText = "يرجى كتابة اسم المستضيف";
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/rooms/create`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ game_id: gameId, host_name: hostName })
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    feedback.className = "text-xs font-bold text-emerald-400";
-                    feedback.innerText = `تمت العملية! كود الغرفة: ${data.room.room_code}`;
-                } else {
-                    feedback.innerText = data.message || "فشل إنشاء الغرفة";
-                }
-            } catch (err) {
-                feedback.innerText = "خطأ في الاتصال بالشبكة";
-            }
-        }
-
-        async function submitJoinRoom() {
-            const roomCode = document.getElementById('join-room-code').value.trim();
-            const playerName = document.getElementById('join-player-name').value.trim();
-            const feedback = document.getElementById('join-feedback');
-
-            if (!roomCode || !playerName) {
-                feedback.innerText = "أدخل الاسم وكود الغرفة كاملاً";
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/rooms/join`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ room_code: roomCode, player_name: playerName })
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    feedback.className = "text-xs font-bold text-emerald-400";
-                    feedback.innerText = `تم الانضمام بنجاح يا ${data.player.player_name}!`;
-                } else {
-                    feedback.innerText = data.message || "الغرفة غير موجودة";
-                }
-            } catch (err) {
-                feedback.innerText = "خطأ في الاتصال بالشبكة";
-            }
-        }
-
-        function closeGameModal() {
-            document.getElementById('game-modal').classList.add('hidden');
-        }
-
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
-            });
-        }
-    </script>
+    // جلب الألعاب فور فتح الصفحة
+    fetchGames();
+  </script>
 </body>
 </html>
