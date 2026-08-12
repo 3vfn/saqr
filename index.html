@@ -3,101 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة صقر للألعاب التفاعلية</title>
+  <title>منصة صقر للألعاب التفاعلية 🦅</title>
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 2rem; max-width: 800px; margin: 0 auto; }
-    h1 { color: #38bdf8; text-align: center; }
-    .card { background: #1e293b; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid #334155; }
-    button { background: #0284c7; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; width: 100%; }
-    button:hover { background: #0369a1; }
-    input, select { padding: 0.75rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; width: 100%; box-sizing: border-box; margin-bottom: 1rem; }
-    .game-item { background: #334155; padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; display: flex; justify-content: space-between; }
-    #log { background: #000; padding: 1rem; border-radius: 6px; color: #4ade80; font-family: monospace; white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto; }
+    :root {
+      --bg-main: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: #334155;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #22c55e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; }
+    
+    .container { width: 100%; max-width: 850px; }
+    
+    header { text-align: center; margin-bottom: 2rem; }
+    header h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; }
+    header p { color: var(--text-muted); font-size: 1rem; }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    input, select {
+      width: 100%; padding: 0.85rem; border-radius: 10px; border: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.6); color: #fff; font-size: 1rem; margin-bottom: 1rem; outline: none; transition: 0.2s;
+    }
+    input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+
+    button {
+      width: 100%; padding: 0.85rem; border-radius: 10px; border: none;
+      background: var(--primary); color: white; font-size: 1rem; font-weight: bold;
+      cursor: pointer; transition: 0.2s display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    button.secondary { background: #334155; }
+    button.secondary:hover { background: #475569; }
+
+    /* شبكة الألعاب */
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .game-card {
+      background: rgba(15, 23, 42, 0.5); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 1rem; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .game-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .game-title { font-weight: bold; color: #fff; font-size: 1.05rem; }
+    .game-meta { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; display: flex; justify-content: space-between; }
+
+    /* شاشة اللوبي */
+    .lobby-header { text-align: center; padding: 1rem 0; border-bottom: 1px solid var(--card-border); margin-bottom: 1.5rem; }
+    .room-code-badge {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent);
+      padding: 0.5rem 1.5rem; border-radius: 50px; font-size: 1.8rem; font-weight: bold; color: var(--accent); letter-spacing: 2px; margin: 1rem 0;
+    }
+    .players-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+    .player-chip {
+      background: rgba(51, 65, 85, 0.5); border: 1px solid var(--card-border);
+      padding: 0.75rem; border-radius: 10px; display: flex; align-items: center; gap: 0.5rem; font-weight: bold;
+    }
+    .player-chip.host { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+
+    /* إدارة الشاشات */
+    .view { display: none; }
+    .view.active { display: block; }
   </style>
 </head>
 <body>
 
-  <h1>🦅 منصة صقر للألعاب</h1>
+  <div class="container">
+    <header>
+      <h1>🦅 منصة صقر للألعاب</h1>
+      <p>اختر لعبتك، أنشئ غرفتك، والتحدي يبدأ فوراً</p>
+    </header>
 
-  <!-- 1. قائمة الألعاب -->
-  <div class="card">
-    <h2>الألعاب المتاحة</h2>
-    <button onclick="fetchGames()">تحديث قائمة الألعاب</button>
-    <div id="games-list" style="margin-top: 1rem;">في انتظار جلب الألعاب...</div>
-  </div>
+    <!-- الشاشة الرئيسية (Home View) -->
+    <div id="home-view" class="view active">
+      
+      <div class="grid-2">
+        <!-- إنشاء غرفة -->
+        <div class="card">
+          <h2>🎯 إنشاء غرفة جديدة</h2>
+          <input type="text" id="create-host" placeholder="اسمك (المستضيف)...">
+          <select id="create-game-id">
+            <option value="">جاري تحميل الألعاب...</option>
+          </select>
+          <button onclick="handleCreateRoom()">إنشاء الغرفة والدخول</button>
+        </div>
 
-  <!-- 2. إنشاء غرفة -->
-  <div class="card">
-    <h2>إنشاء غرفة جديدة</h2>
-    <input type="text" id="create-host" placeholder="اسم المستضيف (مثال: عبد العزيز)">
-    <select id="create-game-id">
-      <option value="">اختر اللعبة...</option>
-    </select>
-    <button onclick="handleCreateRoom()">إنشاء الغرفة</button>
-  </div>
+        <!-- الانضمام لغرفة -->
+        <div class="card">
+          <h2>🔑 الانضمام لغرفة</h2>
+          <input type="text" id="join-code" placeholder="كود الغرفة (6 أرقام)..." maxlength="6">
+          <input type="text" id="join-name" placeholder="اسمك...">
+          <button class="secondary" onclick="handleJoinRoom()">انضمام للغرفة</button>
+        </div>
+      </div>
 
-  <!-- 3. الانضمام لغرفة -->
-  <div class="card">
-    <h2>الانضمام لغرفة</h2>
-    <input type="text" id="join-code" placeholder="كود الغرفة المكون من 6 أرقام">
-    <input type="text" id="join-name" placeholder="اسمك">
-    <button onclick="handleJoinRoom()">انضمام</button>
-  </div>
+      <!-- استعراض الألعاب -->
+      <div class="card">
+        <h2>🎮 الألعاب المتاحة</h2>
+        <div id="games-container" class="games-grid">
+          <div style="color: var(--text-muted);">جاري جلب الألعاب المتاحة...</div>
+        </div>
+      </div>
 
-  <!-- سجل الاستجابات -->
-  <div class="card">
-    <h2>سجل الاستجابة (API Output)</h2>
-    <div id="log">في انتظار الأوامر...</div>
+    </div>
+
+    <!-- شاشة اللوبي (Lobby View) -->
+    <div id="lobby-view" class="view">
+      <div class="card">
+        <div class="lobby-header">
+          <span id="lobby-game-title" style="color: var(--text-muted); font-size: 0.9rem;">اسم اللعبة</span>
+          <div class="room-code-badge">
+            <span id="lobby-code">------</span>
+            <button onclick="copyCode()" style="width: auto; padding: 0.3rem 0.6rem; font-size: 0.8rem;" class="secondary">نسخ</button>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">شارك الكود مع أصدقائك للانضمام</p>
+        </div>
+
+        <h3>اللاعبون المتواجدون (<span id="players-count">0</span>)</h3>
+        <div id="players-container" class="players-list">
+          <!-- قائمة اللاعبين تظهر هنا -->
+        </div>
+
+        <div class="grid-2" style="margin-top: 2rem;">
+          <button class="secondary" onclick="leaveRoom()">مغادرة الغرفة</button>
+          <button id="start-game-btn" onclick="startGame()">بدء اللعبة الان 🚀</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
     const API_BASE = 'https://saqrr.sindazon.workers.dev';
+    let currentRoom = null;
+    let currentPlayer = null;
+    let lobbyInterval = null;
 
-    function log(data) {
-      document.getElementById('log').innerText = JSON.stringify(data, null, 2);
+    // التنقل بين الشاشات
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
     }
 
-    // جلب قائمة الألعاب
-    async function fetchGames() {
+    // جلب الألعاب عند فتح الصفحة
+    async function loadGames() {
       try {
-        const res = await fetch(`${API_BASE}/api/games`, {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
-        });
-        const data = await res.json();
-        log(data);
+        const res = await fetch(`${API_BASE}/api/games`);
+        const result = await res.json();
 
-        if (data.success && data.data) {
-          const listDiv = document.getElementById('games-list');
-          const selectDiv = document.getElementById('create-game-id');
+        if (result.success && result.data) {
+          const select = document.getElementById('create-game-id');
+          const grid = document.getElementById('games-container');
           
-          listDiv.innerHTML = '';
-          selectDiv.innerHTML = '<option value="">اختر اللعبة...</option>';
+          select.innerHTML = '<option value="">اختر اللعبة...</option>';
+          grid.innerHTML = '';
 
-          data.data.forEach(game => {
-            listDiv.innerHTML += `
-              <div class="game-item">
-                <span><b>#${game.id}</b> - ${game.title} (${game.category || 'عام'})</span>
-                <span>⭐ ${game.rating || 0}</span>
+          result.data.forEach(game => {
+            // إضافة للقائمة المنسدلة
+            select.innerHTML += `<option value="${game.id}">${game.title}</option>`;
+
+            // إضافة للشبكة التفاعلية
+            grid.innerHTML += `
+              <div class="game-card" onclick="selectGame(${game.id})">
+                <div class="game-title">${game.title}</div>
+                <div class="game-meta">
+                  <span>📂 ${game.category || 'عام'}</span>
+                  <span>⭐ ${game.rating || 5.0}</span>
+                </div>
               </div>
             `;
-            selectDiv.innerHTML += `<option value="${game.id}">${game.title} (#${game.id})</option>`;
           });
-        } else {
-          log({ error: 'لم يتم العثور على ألعاب أو تحدث مشكلة بالبيانات', details: data });
         }
       } catch (err) {
-        log({ error: 'تعذر الاتصال بخادم السحابة: ' + err.message });
+        console.error('خطأ في جلب الألعاب:', err);
       }
     }
 
-    // التعامل مع إنشاء الغرفة
+    function selectGame(gameId) {
+      document.getElementById('create-game-id').value = gameId;
+      document.getElementById('create-host').focus();
+    }
+
+    // إنشاء غرفة
     async function handleCreateRoom() {
       const host_name = document.getElementById('create-host').value.trim();
-      const game_id = parseInt(document.getElementById('create-game-id').value);
+      const game_id = document.getElementById('create-game-id').value;
 
       if (!host_name || !game_id) {
-        alert('يرجى كتابة الاسم واختيار اللعبة');
+        alert('يرجى تحديد اسم المستضيف واختيار لعبة');
         return;
       }
 
@@ -107,25 +219,27 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ game_id, host_name })
         });
-        const data = await res.json();
-        log(data);
-        if (data.success) {
-          alert(`تم إنشاء الغرفة بنجاح! كود الغرفة: ${data.room.room_code}`);
+        const result = await res.json();
+
+        if (result.success) {
+          currentRoom = result.room;
+          currentPlayer = { player_name: host_name, is_host: true };
+          enterLobby();
         } else {
-          alert('خطأ: ' + (data.message || data.error));
+          alert('خطأ: ' + result.message);
         }
       } catch (err) {
-        log({ error: err.message });
+        alert('تعذر الاتصال بالخادم');
       }
     }
 
-    // التعامل مع الانضمام لغرفة
+    // الانضمام لغرفة
     async function handleJoinRoom() {
       const room_code = document.getElementById('join-code').value.trim();
       const player_name = document.getElementById('join-name').value.trim();
 
       if (!room_code || !player_name) {
-        alert('يرجى كتابة الاسم وكود الغرفة');
+        alert('يرجى كتابة كود الغرفة واسمك');
         return;
       }
 
@@ -135,19 +249,76 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ room_code, player_name })
         });
-        const data = await res.json();
-        log(data);
-        if (data.success) {
-          alert(`تم الانضمام بنجاح كـ: ${data.player.player_name}`);
+        const result = await res.json();
+
+        if (result.success) {
+          currentRoom = result.room;
+          currentPlayer = result.player;
+          enterLobby();
         } else {
-          alert('خطأ: ' + (data.message || data.error));
+          alert('خطأ: ' + result.message);
         }
       } catch (err) {
-        log({ error: err.message });
+        alert('تعذر الاتصال بالخادم');
       }
     }
 
-    window.addEventListener('DOMContentLoaded', fetchGames);
+    // الدخول لشاشة اللوبي
+    function enterLobby() {
+      showView('lobby-view');
+      document.getElementById('lobby-code').innerText = currentRoom.room_code;
+      
+      // التمييز بين المستضيف واللاعب العادي
+      const startBtn = document.getElementById('start-game-btn');
+      if (currentPlayer.is_host) {
+        startBtn.style.display = 'block';
+      } else {
+        startBtn.style.display = 'none';
+      }
+
+      // جلب وتحديث اللاعبين بانتظام
+      fetchLobbyPlayers();
+      lobbyInterval = setInterval(fetchLobbyPlayers, 2500);
+    }
+
+    // جلب قائمة اللاعبين للغرفة الحالية
+    async function fetchLobbyPlayers() {
+      if (!currentRoom) return;
+
+      try {
+        // يمكن التوسع هنا بإنشاء API يربط اللاعبين بالغرفة مباشرة
+        const container = document.getElementById('players-container');
+        document.getElementById('players-count').innerText = '1';
+        
+        container.innerHTML = `
+          <div class="player-chip host">
+            👑 ${currentRoom.host_name || currentPlayer.player_name} (المستضيف)
+          </div>
+        `;
+      } catch (err) {
+        console.error('خطأ في تحديث اللاعبين:', err);
+      }
+    }
+
+    function copyCode() {
+      const code = document.getElementById('lobby-code').innerText;
+      navigator.clipboard.writeText(code);
+      alert('تم نسخ كود الغرفة: ' + code);
+    }
+
+    function leaveRoom() {
+      clearInterval(lobbyInterval);
+      currentRoom = null;
+      currentPlayer = null;
+      showView('home-view');
+    }
+
+    function startGame() {
+      alert('سيتم إطلاق شاشة الأسئلة واللعب التفاعلي في التحديث القادم!');
+    }
+
+    // بداية التشغيل عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', loadGames);
   </script>
 </body>
 </html>
