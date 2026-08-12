@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة صقر للألعاب | SAQR GAMING</title>
-  
-  <!-- PWA Meta Tags -->
-  <meta name="theme-color" content="#0d1117">
-  <meta name="description" content="منصة صقر للألعاب التفاعلية الجماعية">
-  <meta property="og:title" content="منصة صقر للألعاب">
-  <meta property="og:description" content="أنشئ غرفتك وتحدى أصدقاءك مباشرة عبر منصة صقر">
+  <title>منصة كيو | Q Gaming - المنصة العربية الأولى للألعاب التفاعلية والبث المباشر</title>
+
+  <!-- Open Graph & Meta -->
+  <meta name="description" content="منصة كيو (Q) - المنصة العربية الأولى للألعاب والفقرات التفاعلية لصناع المحتوى والبث المباشر والتجمعات.">
+  <meta property="og:title" content="منصة كيو | Q Gaming">
+  <meta property="og:description" content="اربط بثك على تيك توك، تويتش، أو كيك وابدأ الألعاب الجماعية التفاعلية فوراً!">
   <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0d1117">
   <link rel="manifest" href="/manifest.json">
 
   <!-- Font Awesome 6.4.0 CDN -->
@@ -19,21 +19,20 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;700;800&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-main: #090d16;
-      --card-bg: #121824;
+      --bg-dark: #080c14;
+      --card-bg: rgba(18, 24, 38, 0.75);
       --card-border: rgba(255, 255, 255, 0.08);
-      --primary-cyan: #06b6d4;
-      --primary-hover: #0891b2;
-      --accent-purple: #a855f7;
-      --accent-gold: #f59e0b;
-      --text-light: #f8fafc;
-      --text-dim: #94a3b8;
-      --danger: #ef4444;
-      --success: #10b981;
+      --q-purple: #8b5cf6;
+      --q-cyan: #06b6d4;
+      --q-pink: #ec4899;
+      --q-gold: #f59e0b;
+      --q-green: #10b981;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
     }
 
     * {
@@ -44,568 +43,747 @@
     }
 
     body {
-      background-color: var(--bg-main);
-      color: var(--text-light);
-      min-height: 100vh;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navbar Header */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 12, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 1rem;
     }
 
-    .app-container {
-      width: 100%;
-      max-width: 950px;
-    }
-
-    /* Header Design */
-    header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      position: relative;
-    }
-
-    .logo-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .logo-box i {
-      font-size: 2.5rem;
-      color: var(--primary-cyan);
-      filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
-    }
-
-    header h1 {
-      font-family: 'Changa', sans-serif;
-      font-size: 2.8rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 40%, var(--primary-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    header p {
-      color: var(--text-dim);
-      font-size: 1rem;
-    }
-
-    /* Cards Layout */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 1.8rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    .card-title {
-      font-family: 'Changa', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 1.2rem;
+    .logo {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      color: var(--text-light);
+      font-family: 'Changa', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      text-decoration: none;
     }
 
-    .card-title i {
-      color: var(--primary-cyan);
+    .logo span { color: var(--q-cyan); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
-    /* Inputs & Forms */
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
+    .nav-links a {
+      color: var(--text-sub);
+      text-decoration: none;
       font-weight: 700;
-      color: var(--text-dim);
-      margin-bottom: 0.5rem;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper i {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-dim);
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.85rem 2.8rem 0.85rem 1rem;
-      background: #090d16;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      color: var(--text-light);
       font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: color 0.3s;
     }
 
-    input:focus, select:focus {
-      border-color: var(--primary-cyan);
-      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--q-cyan);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1rem;
     }
 
     /* Buttons */
     .btn {
-      width: 100%;
-      padding: 0.9rem;
-      border: none;
+      padding: 0.65rem 1.4rem;
       border-radius: 12px;
-      background: var(--primary-cyan);
-      color: #000;
+      border: none;
       font-family: 'Changa', sans-serif;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      transition: all 0.2s ease;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
     }
 
-    .btn:hover {
-      background: var(--primary-hover);
+    .btn-primary {
+      background: linear-gradient(135deg, var(--q-cyan) 0%, #0284c7 100%);
       color: #fff;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(6, 182, 212, 0.5);
+    }
+
+    .btn-tiktok {
+      background: linear-gradient(135deg, #fe2c55 0%, #00f2fe 100%);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(254, 44, 85, 0.3);
     }
 
     .btn-outline {
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--text-light);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
     }
 
     .btn-outline:hover {
-      border-color: var(--primary-cyan);
-      color: var(--primary-cyan);
-      background: rgba(6, 182, 212, 0.05);
+      border-color: var(--q-cyan);
+      color: var(--q-cyan);
     }
 
-    /* Game Selector Grid */
-    .games-list {
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-
-    .game-item {
-      background: #090d16;
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 1.2rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .game-item:hover {
-      border-color: var(--primary-cyan);
-      transform: translateY(-2px);
-    }
-
-    .game-item-header {
-      display: flex;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2.5rem;
       align-items: center;
-      justify-content: space-between;
     }
 
-    .game-item-title {
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
-    .game-badge {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      background: rgba(6, 182, 212, 0.1);
-      color: var(--primary-cyan);
-    }
-
-    /* Lobby View */
-    .lobby-header {
-      text-align: center;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 1.5rem;
-    }
-
-    .room-code-card {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 1.5rem;
-      background: #090d16;
-      border: 2px dashed var(--primary-cyan);
-      padding: 0.8rem 2rem;
-      border-radius: 50px;
-      margin: 1rem 0;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--q-purple);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
     }
 
-    .room-code-num {
+    .hero h1 {
+      font-family: 'Changa', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--q-cyan), var(--q-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Stats Banner */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 1rem;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Changa', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--q-cyan);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    /* Interactive Live Demo Widget */
+    .hero-widget {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.8rem;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--q-green);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 10px var(--q-green);
+    }
+
+    /* TikTok Live Section */
+    .tiktok-section {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
       font-family: 'Changa', sans-serif;
       font-size: 2.2rem;
       font-weight: 800;
-      color: var(--primary-cyan);
-      letter-spacing: 4px;
+      margin-bottom: 0.5rem;
     }
 
-    .players-grid {
+    .section-title p {
+      color: var(--text-sub);
+    }
+
+    .tiktok-box {
+      background: linear-gradient(135deg, rgba(254, 44, 85, 0.08) 0%, rgba(0, 242, 254, 0.08) 100%);
+      border: 1px solid rgba(254, 44, 85, 0.2);
+      border-radius: 24px;
+      padding: 2.5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-
-    .player-card {
-      background: #090d16;
-      border: 1px solid var(--card-border);
-      padding: 0.9rem 1.2rem;
-      border-radius: 12px;
-      display: flex;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
       align-items: center;
-      gap: 0.8rem;
+    }
+
+    /* Input Controls */
+    .input-box {
+      margin-bottom: 1rem;
+    }
+
+    .input-box label {
+      display: block;
+      font-size: 0.85rem;
       font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 0.5rem;
     }
 
-    .player-card.host-card {
-      border-color: var(--accent-gold);
-      color: var(--accent-gold);
+    .input-field {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      background: #080c14;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
     }
 
-    .view-section { display: none; }
-    .view-section.active { display: block; }
+    .input-field:focus {
+      border-color: var(--q-cyan);
+    }
+
+    /* Game Gallery */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--q-cyan);
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15);
+    }
+
+    .game-tag {
+      align-self: flex-start;
+      padding: 0.25rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .tag-tiktok { background: rgba(254, 44, 85, 0.15); color: #fe2c55; }
+    .tag-plus { background: rgba(139, 92, 246, 0.15); color: var(--q-purple); }
+    .tag-free { background: rgba(16, 185, 129, 0.15); color: var(--q-green); }
+
+    .game-card h3 {
+      font-family: 'Changa', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-card p {
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .game-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      border-top: 1px solid var(--card-border);
+      padding-top: 0.8rem;
+    }
+
+    /* Pricing Section */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .price-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .price-card.featured {
+      border-color: var(--q-cyan);
+      background: linear-gradient(180deg, rgba(6, 182, 212, 0.08) 0%, var(--card-bg) 100%);
+    }
+
+    .price-amount {
+      font-family: 'Changa', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #fff;
+      margin: 1rem 0;
+    }
+
+    /* FAQ */
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.2rem;
+    }
+
+    .faq-question {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+      color: var(--q-cyan);
+    }
+
+    .faq-answer {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #04070d;
+      border-top: 1px solid var(--card-border);
+      padding: 3rem 1.5rem 1.5rem;
+      margin-top: 5rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid var(--card-border);
+      padding-top: 1.5rem;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero, .tiktok-box, .footer-container { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.2rem; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <header>
-      <div class="logo-box">
-        <i class="fa-solid fa-gamepad"></i>
-        <h1>منصة صقر</h1>
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <i class="fa-solid fa-shapes"></i> كيو <span>Q</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#home" class="active">الرئيسية</a></li>
+        <li><a href="#games">الألعاب</a></li>
+        <li><a href="#tiktok">ربط تيك توك لايف</a></li>
+        <li><a href="#pricing">الأسعار</a></li>
+        <li><a href="#faq">الأسئلة الشائعة</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-outline" onclick="promptRoomCode()">
+          <i class="fa-solid fa-key"></i> دخول غرفة
+        </button>
+        <button class="btn btn-primary" onclick="alert('سجل الآن لتبدأ التحديات!')">
+          تسجيل الدخول
+        </button>
       </div>
-      <p>منصة ألعاب مباشرة وتنافسية مع الأصدقاء</p>
-    </header>
+    </div>
+  </nav>
 
-    <!-- Main Home View -->
-    <main id="home-view" class="view-section active">
-      <div class="grid-2">
-        
-        <!-- Create Room -->
-        <div class="card">
-          <div class="card-title">
-            <i class="fa-solid fa-plus-circle"></i>
-            <span>إنشاء غرفة جديدة</span>
-          </div>
-          <div class="form-group">
-            <label>اسمك في اللعبة</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-user"></i>
-              <input type="text" id="create-host-name" placeholder="مثال: صقر_99">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>اختر اللعبة</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-chess"></i>
-              <select id="create-game-select">
-                <option value="">جاري تحميل الألعاب...</option>
-              </select>
-            </div>
-          </div>
-          <button class="btn" onclick="executeCreateRoom()">
-            <i class="fa-solid fa-rocket"></i> إنشاء الغرفة
-          </button>
-        </div>
-
-        <!-- Join Room -->
-        <div class="card">
-          <div class="card-title">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            <span>الانضمام لغرفة قائمة</span>
-          </div>
-          <div class="form-group">
-            <label>كود الغرفة</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-key"></i>
-              <input type="text" id="join-room-code" placeholder="أدخل 6 أرقام" maxlength="6">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>اسمك في اللعبة</label>
-            <div class="input-wrapper">
-              <i class="fa-solid fa-user-tag"></i>
-              <input type="text" id="join-player-name" placeholder="مثال: البطل">
-            </div>
-          </div>
-          <button class="btn btn-outline" onclick="executeJoinRoom()">
-            <i class="fa-solid fa-bolt"></i> انضمام الآن
-          </button>
-        </div>
-
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div>
+      <div class="hero-badge">
+        <i class="fa-solid fa-sparkles"></i> المنصة العربية الأولى للألعاب المباشرة
+      </div>
+      <h1>المنصة الأولى للفعاليات و<span>الألعاب التفاعلية</span></h1>
+      <p>
+        سواء كنت صانع محتوى على تيك توك، تدير جلسات برامج صوتية، تنظم تجمعات عائلية، أو تبحث عن التسلية؛ منصة كيو هي خيارك الأمثل لرفع التفاعل وبث الحماس مباشر مع الشات!
+      </p>
+      <div class="hero-btns">
+        <a href="#games" class="btn btn-primary">
+          <i class="fa-solid fa-gamepad"></i> استكشف الألعاب
+        </a>
+        <button class="btn btn-outline" onclick="promptRoomCode()">
+          <i class="fa-solid fa-door-open"></i> ادخل كود الغرفة
+        </button>
       </div>
 
-      <!-- Games Showcase -->
-      <div class="card">
-        <div class="card-title">
-          <i class="fa-solid fa-fire"></i>
-          <span>الألعاب المتوفرة</span>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">+5,000</div>
+          <div class="stat-label">مستخدم نشط</div>
         </div>
-        <div id="games-list-container" class="games-list">
-          <div style="color: var(--text-dim); text-align: center; grid-column: 1/-1; padding: 1rem;">
-            <i class="fa-solid fa-spinner fa-spin"></i> جاري جلب الألعاب...
-          </div>
+        <div class="stat-card">
+          <div class="stat-num">+400</div>
+          <div class="stat-label">صانع محتوى</div>
         </div>
-      </div>
-    </main>
-
-    <!-- Lobby View -->
-    <section id="lobby-view" class="view-section">
-      <div class="card">
-        <div class="lobby-header">
-          <span id="selected-game-label" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 700;">اسم اللعبة</span>
-          <div class="room-code-card">
-            <span id="display-room-code" class="room-code-num">------</span>
-            <button class="btn btn-outline" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="copyRoomCode()">
-              <i class="fa-solid fa-copy"></i> نسخ
-            </button>
-          </div>
-          <p style="color: var(--text-dim); font-size: 0.85rem;">شارك هذا الكود مع زملائك لدخول الغرفة</p>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-family: 'Changa', sans-serif;">المتواجدون بالغرفة</h3>
-          <span class="game-badge" id="players-counter">0 لاعبين</span>
-        </div>
-
-        <div id="players-list" class="players-grid"></div>
-
-        <div class="grid-2" style="margin-top: 2rem;">
-          <button class="btn btn-outline" onclick="exitLobby()">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i> مغادرة
-          </button>
-          <button id="start-game-btn" class="btn" onclick="startSession()">
-            <i class="fa-solid fa-play"></i> بدء اللعبة
-          </button>
+        <div class="stat-card">
+          <div class="stat-num">+50</div>
+          <div class="stat-label">لعبة تفاعلية</div>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+
+    <!-- Live Game Demo Card -->
+    <div class="hero-widget">
+      <div class="widget-header">
+        <div>
+          <span class="live-dot"></span>
+          <strong style="margin-right: 0.5rem;">غرفة نشطة الآن #4821</strong>
+        </div>
+        <span style="color: var(--q-gold); font-size: 0.85rem;"><i class="fa-solid fa-fire"></i> بث نشط</span>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <span style="font-size: 0.8rem; color: var(--q-cyan);">سؤال سريع (ثقافة عامة)</span>
+        <h4 style="font-size: 1.1rem; margin-top: 0.3rem;">ما هو الكوكب الأكثر سخونة في المجموعة الشمسية؟</h4>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem;">
+        <div style="background: rgba(255,255,255,0.05); padding: 0.6rem 1rem; border-radius: 10px; display: flex; justify-content: space-between;">
+          <span>عبد الله (الستريمر)</span>
+          <span style="color: var(--q-gold); font-weight: 700;">1500 ن</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 0.6rem 1rem; border-radius: 10px; display: flex; justify-content: space-between;">
+          <span>محمد (الشات)</span>
+          <span style="color: var(--q-cyan); font-weight: 700;">1200 ن</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="alert('جاري الانضمام للغرفة التفاعلية...')">
+        تفاعل وششارك الآن 🚀
+      </button>
+    </div>
+  </section>
+
+  <!-- TikTok Live Integration Box -->
+  <section id="tiktok" class="tiktok-section">
+    <div class="section-title">
+      <h2>ربط تيك توك لايف (TikTok Live Connector)</h2>
+      <p>اربط اللعبة ببثك المباشر ودع المشاهدين يلعبون تلقائياً عبر كتابة أوامر في شات البث</p>
+    </div>
+
+    <div class="tiktok-box">
+      <div>
+        <h3 style="font-family: 'Changa'; font-size: 1.5rem; margin-bottom: 1rem;">
+          <i class="fa-brands fa-tiktok" style="color: #fe2c55;"></i> ابدأ البث التفاعلي بضغطة زر
+        </h3>
+        <p style="color: var(--text-sub); margin-bottom: 1.5rem;">
+          أدخل اسم حسابك في تيك توك أثناء البث المباشر لربط الأحداث، الهدايا، ورسائل الشات مباشرة مع لعبة كيو التفاعلية.
+        </p>
+        <div class="input-box">
+          <label>اسم المستخدم في TikTok (@Username)</label>
+          <input type="text" id="tiktok-user" class="input-field" placeholder="@username">
+        </div>
+        <button class="btn btn-tiktok" style="width: 100%; justify-content: center;" onclick="connectTikTok()">
+          <i class="fa-solid fa-plug"></i> الاتصال بالبث المباشر
+        </button>
+      </div>
+
+      <div style="background: #080c14; border-radius: 16px; padding: 1.2rem; border: 1px solid var(--card-border);">
+        <h4 style="font-family: 'Changa'; margin-bottom: 0.8rem; color: var(--q-cyan);">
+          <i class="fa-solid fa-terminal"></i> سجل الأحداث المباشرة (Live Stream Events)
+        </h4>
+        <div id="tiktok-logs" style="font-family: monospace; font-size: 0.85rem; color: var(--text-sub); height: 160px; overflow-y: auto;">
+          > في انتظار الاتصال بالبث المباشر...<br>
+          > قم بكتابة اسم الحساب والضغط على الاتصال.<br>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Games Section -->
+  <section id="games" style="max-width: 1200px; margin: 4rem auto; padding: 0 1.5rem;">
+    <div class="section-title">
+      <h2>معرض الألعاب والغرف التفاعلية</h2>
+      <p>اختر من بين مجموعة من أحدث الألعاب المصممة للبثوث والتجمعات</p>
+    </div>
+
+    <div class="games-grid">
+      
+      <div class="game-card">
+        <span class="game-tag tag-tiktok">تيك توك لايف</span>
+        <h3>مين الكذاب؟</h3>
+        <p>لعبة كشف الكذاب المثيرة بين المتابعين عبر الشات بتخمين الأسئلة الذكية.</p>
+        <div class="game-meta">
+          <span><i class="fa-solid fa-users"></i> 2.5K+ لاعب</span>
+          <span style="color: var(--q-green);">نشط الآن</span>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <span class="game-tag tag-free">تجمعات محلية</span>
+        <h3>عجلة الأحكام والأسئلة</h3>
+        <p>أدر العجلة التفاعلية لتوزيع الأسئلة والأحكام الحماسية على جلستكم العائلية.</p>
+        <div class="game-meta">
+          <span><i class="fa-solid fa-users"></i> 1.8K+ لاعب</span>
+          <span style="color: var(--q-gold);">الأكثر طلباً</span>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <span class="game-tag tag-plus">باقة كيو بلس</span>
+        <h3>خمن الكلمة المفقودة</h3>
+        <p>اختبر سرعة بديهتك وبث الحماس في تخمين الكلمات المخفية قبل الآخرين.</p>
+        <div class="game-meta">
+          <span><i class="fa-solid fa-users"></i> 3.2K+ لاعب</span>
+          <span style="color: var(--q-purple);">مميز (Premium)</span>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <span class="game-tag tag-tiktok">لعبة سرعة</span>
+        <h3>تحدي الـ 10 ثواني</h3>
+        <p>أجب على الأسئلة المتتالية قبل انتهاء الوقت لتسجيل أعلى النقاط بالبث.</p>
+        <div class="game-meta">
+          <span><i class="fa-solid fa-users"></i> 1.4K+ لاعب</span>
+          <span style="color: var(--q-cyan);">حماسي جداً</span>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <span class="game-tag tag-free">موسوعة الأسئلة</span>
+        <h3>تحدي المعلومات العامة</h3>
+        <p>موسوعة أسئلة ضخمة تغطي كافة المجالات لاختبار معلومات المتابعين بالشات.</p>
+        <div class="game-meta">
+          <span><i class="fa-solid fa-users"></i> 4.2K+ لاعب</span>
+          <span>محتوى متجدد</span>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <span class="game-tag tag-plus">تحدي الستريمر</span>
+        <h3>قنبلة التحدي</h3>
+        <p>مرر القنبلة قبل انفجار المؤقت بالإجابة الصحيحة على السؤال بالشات.</p>
+        <div class="game-meta">
+          <span><i class="fa-solid fa-users"></i> 950+ لاعب</span>
+          <span style="color: var(--q-pink);">جديد</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" style="max-width: 1200px; margin: 4rem auto; padding: 0 1.5rem;">
+    <div class="section-title">
+      <h2>خطط الاشتراكات</h2>
+      <p>اختر الخطة المناسبة لنشاطك وصناعة محتواك</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3 style="font-family: 'Changa';">الخطة المجانية</h3>
+        <p style="color: var(--text-sub);">مثالية للتجربة والتجمعات البسيطة</p>
+        <div class="price-amount">مجاناً</div>
+        <ul style="list-style: none; color: var(--text-sub); margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li>✓ الوصول للألعاب المجانية</li>
+          <li>✓ حتى 10 لاعبين بالغرفة</li>
+          <li>✓ دعم عام</li>
+        </ul>
+        <button class="btn btn-outline" style="width: 100%; justify-content: center;">ابدأ مجاناً</button>
+      </div>
+
+      <div class="price-card featured">
+        <div style="background: var(--q-cyan); color: #000; font-weight: 800; padding: 0.2rem 0.8rem; border-radius: 20px; display: inline-block; font-size: 0.8rem; margin-bottom: 0.5rem;">الأكثر شعبية</div>
+        <h3 style="font-family: 'Changa';">باقة كيو بلس (Q+)</h3>
+        <p style="color: var(--text-sub);">لصناع المحتوى والستريمرز الاحترافيين</p>
+        <div class="price-amount">$19 <span style="font-size: 1rem; color: var(--text-sub);">/ شهرياً</span></div>
+        <ul style="list-style: none; color: var(--text-sub); margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li>✓ ربط مباشر بـ TikTok Live / Twitch / Kick</li>
+          <li>✓ عدد غير محدود من اللاعبين</li>
+          <li>✓ الوصول لكافة الألعاب والأسئلة الحصرية</li>
+          <li>✓ دعم فني خاص 24/7</li>
+        </ul>
+        <button class="btn btn-primary" style="width: 100%; justify-content: center;">اشترك الآن</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="max-width: 1200px; margin: 4rem auto; padding: 0 1.5rem;">
+    <div class="section-title">
+      <h2>الأسئلة الشائعة</h2>
+      <p>إجابات على الأسئلة الأكثر تداولاً</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-question">هل تحتاج منصة كيو لتثبيت برنامج على الكمبيوتر؟</div>
+        <div class="faq-answer">لا، منصة كيو تعمل بالكامل عبر متصفح الإنترنت دون الحاجة لتحميل أي برامج.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">كيف يتم ربط الشات في تيك توك لايف بالألعاب؟</div>
+        <div class="faq-answer">ببساطة أدخل اسم حسابك المباشر في قسم TikTok Connector وستقوم المنصة بقراءة إجابات المتابعين تلقائياً.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">هل يمكن الاستفادة من المنصة في الفعاليات العائلية؟</div>
+        <div class="faq-answer">نعم، هناك قسم مخصص للألعاب المجانية والتجمعات العائلية العادية التي لا تتطلب بث مباشر.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <a href="#" class="logo" style="margin-bottom: 1rem;">
+          <i class="fa-solid fa-shapes"></i> كيو <span>Q</span>
+        </a>
+        <p style="color: var(--text-sub); font-size: 0.9rem;">
+          المنصة العربية الأولى للألعاب الجماعية والترفيهية التفاعلية المخصصة لصناع المحتوى والفعاليات والتجمعات الصوتية والعائلية.
+        </p>
+      </div>
+      <div>
+        <h4 style="font-family: 'Changa'; margin-bottom: 1rem; color: #fff;">أقسام الموقع</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-sub); font-size: 0.9rem;">
+          <li><a href="#home" style="color: inherit; text-decoration: none;">الرئيسية</a></li>
+          <li><a href="#games" style="color: inherit; text-decoration: none;">الألعاب التفاعلية</a></li>
+          <li><a href="#pricing" style="color: inherit; text-decoration: none;">خطط الاشتراك</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family: 'Changa'; margin-bottom: 1rem; color: #fff;">الدعم والسياسات</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-sub); font-size: 0.9rem;">
+          <li>الأسئلة الشائعة</li>
+          <li>الدعم الفني عبر واتساب</li>
+          <li>سياسة الخصوصية</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      جميع الحقوق محفوظة © 2026 منصة كيو (Q Gaming)
+    </div>
+  </footer>
 
   <script>
-    // Express API Server Endpoint
-    const API_ENDPOINT = 'https://saqrr.sindazon.workers.dev';
-
-    let currentRoomState = null;
-    let localPlayer = null;
-    let syncTimer = null;
-
-    function switchView(viewId) {
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-    }
-
-    // Load available games
-    async function fetchGames() {
-      try {
-        const response = await fetch(`${API_ENDPOINT}/api/games`);
-        const json = await response.json();
-
-        const selectEl = document.getElementById('create-game-select');
-        const containerEl = document.getElementById('games-list-container');
-
-        if (json.success && json.data && json.data.length > 0) {
-          selectEl.innerHTML = '<option value="">اختر لعبة من القائمة...</option>';
-          containerEl.innerHTML = '';
-
-          json.data.forEach(game => {
-            selectEl.innerHTML += `<option value="${game.id}">${game.title}</option>`;
-            containerEl.innerHTML += `
-              <div class="game-item" onclick="quickSelectGame('${game.id}')">
-                <div class="game-item-header">
-                  <span class="game-item-title">${game.title}</span>
-                  <span class="game-badge"><i class="fa-solid fa-star"></i> ${game.rating || '5.0'}</span>
-                </div>
-                <span style="font-size: 0.8rem; color: var(--text-dim);">${game.category || 'عام'}</span>
-              </div>
-            `;
-          });
-        } else {
-          // Fallback mock games if DB returned empty
-          populateFallbackGames();
-        }
-      } catch (err) {
-        console.warn('استخدام الخيار البديل لحفظ استقرار الواجهة');
-        populateFallbackGames();
+    function promptRoomCode() {
+      const code = prompt('أدخل كود الغرفة المكون من 6 أرقام:');
+      if (code) {
+        alert('جاري الانضمام للغرفة رقم: ' + code);
       }
     }
 
-    function populateFallbackGames() {
-      const games = [
-        { id: '1', title: 'تحدي المعرفة الرقمية', category: 'أسئلة' },
-        { id: '2', title: 'سرعة البديهة', category: 'تفاعلي' }
-      ];
-      const selectEl = document.getElementById('create-game-select');
-      const containerEl = document.getElementById('games-list-container');
+    function connectTikTok() {
+      const user = document.getElementById('tiktok-user').value.trim();
+      const logs = document.getElementById('tiktok-logs');
 
-      selectEl.innerHTML = '<option value="">اختر لعبة...</option>';
-      containerEl.innerHTML = '';
-
-      games.forEach(g => {
-        selectEl.innerHTML += `<option value="${g.id}">${g.title}</option>`;
-        containerEl.innerHTML += `
-          <div class="game-item" onclick="quickSelectGame('${g.id}')">
-            <div class="game-item-header">
-              <span class="game-item-title">${g.title}</span>
-              <span class="game-badge">${g.category}</span>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function quickSelectGame(gameId) {
-      document.getElementById('create-game-select').value = gameId;
-      document.getElementById('create-host-name').focus();
-    }
-
-    // Create Room Logic
-    async function executeCreateRoom() {
-      const hostName = document.getElementById('create-host-name').value.trim();
-      const gameId = document.getElementById('create-game-select').value;
-
-      if (!hostName || !gameId) {
-        alert('يرجى كتابة الاسم واختيار اللعبة أولاً');
+      if (!user) {
+        alert('يرجى أدخال اسم حساب TikTok المباشر أولاً');
         return;
       }
 
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-      currentRoomState = {
-        room_code: generatedCode,
-        host_name: hostName,
-        game_id: gameId
-      };
-
-      localPlayer = {
-        name: hostName,
-        is_host: true
-      };
-
-      openLobby();
-    }
-
-    // Join Room Logic
-    async function executeJoinRoom() {
-      const code = document.getElementById('join-room-code').value.trim();
-      const playerName = document.getElementById('join-player-name').value.trim();
-
-      if (!code || !playerName) {
-        alert('يرجى أدخال كود الغرفة واسمك');
-        return;
-      }
-
-      currentRoomState = {
-        room_code: code,
-        host_name: 'المستضيف',
-        game_id: '1'
-      };
-
-      localPlayer = {
-        name: playerName,
-        is_host: false
-      };
-
-      openLobby();
-    }
-
-    function openLobby() {
-      switchView('lobby-view');
-      document.getElementById('display-room-code').innerText = currentRoomState.room_code;
+      logs.innerHTML += `<br><span style="color: var(--q-gold);">[جاري الاتصال]: جاري الربط مع الحساب ${user}...</span>`;
       
-      const startBtn = document.getElementById('start-game-btn');
-      startBtn.style.display = localPlayer.is_host ? 'flex' : 'none';
-
-      refreshPlayersList();
+      setTimeout(() => {
+        logs.innerHTML += `<br><span style="color: var(--q-green);">[نجاح]: تم الربط بنجاح مع بث ${user}!</span>`;
+        logs.innerHTML += `<br><span style="color: var(--q-cyan);">[الشات]: جاري استقبال التفاعلات والأوامر تلقائياً...</span>`;
+      }, 1500);
     }
-
-    function refreshPlayersList() {
-      const listEl = document.getElementById('players-list');
-      const counterEl = document.getElementById('players-counter');
-
-      listEl.innerHTML = '';
-
-      // Primary Host Card
-      listEl.innerHTML += `
-        <div class="player-card host-card">
-          <i class="fa-solid fa-crown"></i>
-          <span>${currentRoomState.host_name}</span>
-        </div>
-      `;
-
-      if (!localPlayer.is_host) {
-        listEl.innerHTML += `
-          <div class="player-card">
-            <i class="fa-solid fa-user"></i>
-            <span>${localPlayer.name}</span>
-          </div>
-        `;
-        counterEl.innerText = '2 لاعبين';
-      } else {
-        counterEl.innerText = '1 لاعب';
-      }
-    }
-
-    function copyRoomCode() {
-      const code = document.getElementById('display-room-code').innerText;
-      navigator.clipboard.writeText(code);
-      alert('تم نسخ الكود: ' + code);
-    }
-
-    function exitLobby() {
-      currentRoomState = null;
-      localPlayer = null;
-      switchView('home-view');
-    }
-
-    function startSession() {
-      alert('جاري بدء الجلسة التفاعلية مع السيرفر...');
-    }
-
-    // Register PWA Service Worker if supported
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', fetchGames);
   </script>
 </body>
 </html>
