@@ -1,347 +1,212 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة صقر - Saqr Platform | ألعاب أونلاين وتحديات شبكية</title>
-    
-    <!-- Tailwind CSS v4 CDN -->
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts: Tajawal -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>منصة صقر للألعاب الجماعية | Saqr Games</title>
 
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="منصة صقر للألعاب الجماعية">
+    <meta property="og:description" content="تحدّ أصدقاءك في غرف لعب تفاعلية مباشرة عبر السحابة.">
+    <meta property="og:image" content="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/gamepad.svg">
+    <meta property="og:type" content="website">
+
+    <!-- PWA Configurations -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#020617">
+
+    <!-- CDN Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-        }
-        .glow-amber {
-            box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
-        }
-        .glow-orange {
-            box-shadow: 0 0 35px rgba(234, 88, 12, 0.35);
-        }
+        body { font-family: 'Cairo', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
 
-    <!-- Navbar -->
-    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 text-2xl font-black shadow-lg group-hover:scale-105 transition-transform">
-                    <i class="fa-solid fa-feather-pointed"></i>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">صقر</span>
-                    <span class="text-xs text-slate-400 font-medium -mt-1 tracking-widest">SAQR PLATFORM</span>
-                </div>
-            </a>
-
-            <nav class="hidden md:flex items-center gap-8 font-medium text-slate-300">
-                <a href="#hero" class="hover:text-amber-400 transition-colors">الرئيسية</a>
-                <a href="#games" class="hover:text-amber-400 transition-colors">مكتبة الألعاب</a>
-                <a href="#categories" class="hover:text-amber-400 transition-colors">الأقسام</a>
-                <a href="#features" class="hover:text-amber-400 transition-colors">المميزات</a>
-            </nav>
-
-            <div class="flex items-center gap-4">
-                <button onclick="document.getElementById('games').scrollIntoView({ behavior: 'smooth' })" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-amber-500/20 active:scale-95 flex items-center gap-2">
+    <!-- Header -->
+    <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20">
                     <i class="fa-solid fa-gamepad"></i>
-                    <span>العالم الرقمي</span>
-                </button>
+                </div>
+                <span class="font-black text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">صقر</span>
             </div>
+            <button onclick="openRoomCodeModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-door-open"></i> دخول كود غرفة
+            </button>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="relative overflow-hidden py-20 lg:py-28 bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-semibold mb-6">
-                <i class="fa-solid fa-bolt text-xs"></i> منصة الألعاب الجيل الجديد
-            </span>
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-tight mb-6">
-                انطلق في عالم التحديات مع <span class="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">منصة صقر</span>
-            </h1>
-            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 mb-10 leading-relaxed">
-                استمتع بأفضل الألعاب الجماعية والتفاعلية مباشرة عبر متصفحك. تنافس مع أصدقائك وادخل الغرف المباشرة بنقرة زر.
-            </p>
-
-            <!-- Room Joining Form -->
-            <div class="max-w-xl mx-auto bg-slate-900/90 border border-slate-800 p-2 sm:p-3 rounded-2xl shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row gap-2">
-                <div class="relative flex-1">
-                    <i class="fa-solid fa-key absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                    <input type="text" id="roomCodeInput" placeholder="أدخل رمز الغرفة..." class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl pr-11 pl-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition-colors">
-                </div>
-                <button onclick="joinRoomByCode()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold px-6 py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2">
-                    <span>دخول</span>
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Games Section -->
-    <section id="games" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1">
-        <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-4">
-            <div>
-                <h2 class="text-3xl sm:text-4xl font-black text-white mb-2">مكتبة الألعاب</h2>
-                <p class="text-slate-400">اختر لعبتك المفضلة وابدأ اللعب فوراً</p>
-            </div>
-            <div id="statusIndicator" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span id="statusText">جاري الاتصال بـ Supabase...</span>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        <section class="text-center space-y-3 py-6">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">منصة الألعاب التفاعلية</h1>
+            <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto font-medium">اختر لعبتك المفضلة، أنشئ غرفتك الخاصة، وادعُ أصدقاءك للتحدي فوراً.</p>
+        </section>
 
         <!-- Games Grid -->
-        <div id="gamesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Loading Skeleton -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 animate-pulse h-80"></div>
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 animate-pulse h-80"></div>
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 animate-pulse h-80"></div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section id="categories" class="py-20 bg-slate-900/50 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-black text-white text-center mb-12">أقسام الألعاب</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <button onclick="filterCategory('تحدي')" class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 p-6 rounded-2xl text-center group transition-all">
-                    <i class="fa-solid fa-trophy text-3xl text-amber-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-white mb-1">ألعاب التحدي</h3>
-                    <p class="text-xs text-slate-500">مسابقات واختبارات</p>
-                </button>
-                <button onclick="filterCategory('ذكاء')" class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 p-6 rounded-2xl text-center group transition-all">
-                    <i class="fa-solid fa-brain text-3xl text-orange-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-white mb-1">ألعاب الذكاء</h3>
-                    <p class="text-xs text-slate-500">ألغاز وتفكير استراتيجي</p>
-                </button>
-                <button onclick="filterCategory('جماعي')" class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 p-6 rounded-2xl text-center group transition-all">
-                    <i class="fa-solid fa-users text-3xl text-amber-500 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-white mb-1">ألعاب جماعية</h3>
-                    <p class="text-xs text-slate-500">لعب مباشر مع الأصدقاء</p>
-                </button>
-                <button onclick="filterCategory('سرعة')" class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 p-6 rounded-2xl text-center group transition-all">
-                    <i class="fa-solid fa-bolt text-3xl text-yellow-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-white mb-1">ألعاب السرعة</h3>
-                    <p class="text-xs text-slate-500">استجابة وبديهة عالية</p>
-                </button>
+        <div id="games-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="col-span-full text-center py-12 text-slate-500">
+                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-amber-500 mb-2"></i>
+                <p class="text-xs">جاري تحميل الألعاب من السحابة...</p>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Game Modal -->
-    <div id="gameModal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900">
-                <h3 id="modalTitle" class="text-xl font-bold text-white">عنوان اللعبة</h3>
-                <button onclick="closeGameModal()" class="text-slate-400 hover:text-white p-2 rounded-lg bg-slate-800/50">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <div id="modalContent" class="p-6 overflow-y-auto flex-1">
-                <!-- Game Details / Embed -->
-            </div>
+    <!-- Modal Container -->
+    <div id="game-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeGameModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="modal-content"></div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800 py-12 text-slate-500 text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 font-black">
-                    <i class="fa-solid fa-feather-pointed"></i>
-                </div>
-                <span class="text-slate-300 font-bold">منصة صقر &copy; 2026</span>
-            </div>
-            <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-amber-400 transition-colors">الشروط والأحكام</a>
-                <a href="#" class="hover:text-amber-400 transition-colors">سياسة الخصوصية</a>
-                <a href="#" class="hover:text-amber-400 transition-colors">الدعم الفني</a>
-            </div>
-        </div>
+    <footer class="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
+        <p>© 2026 منصة صقر — بنية برمجية سحابية بالكامل بدون سيرفرات تقليدية</p>
     </footer>
 
-    <!-- Logic Script -->
+    <!-- App Scripts -->
     <script>
-        // Config & Integration Constants
-        const SUPABASE_URL = 'https://YOUR_SUPABASE_PROJECT_ID.supabase.co';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        const WORKER_API_URL = 'https://saqr-api.workers.dev/api/games'; 
+        const API_BASE_URL = 'https://saqr-api.your-subdomain.workers.dev'; // استبدله برابط الـ Worker الخاص بك
 
-        // Initialize Supabase Client
-        let supabaseClient = null;
-        if (typeof supabase !== 'undefined' && SUPABASE_URL.includes('.supabase.co')) {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+        document.addEventListener('DOMContentLoaded', fetchGames);
 
-        // Fallback Default Games
-        const defaultSaqrGames = [
-            {
-                id: '1',
-                title: 'تحدي صقر للمعرفة',
-                description: 'لعبة أسئلة وألغاز تفاعلية تتحدى سرعتك ومعلوماتك العامة.',
-                category: 'تحدي',
-                icon: 'fa-brain',
-                players: '1-4 لاعبين',
-                url: '#'
-            },
-            {
-                id: '2',
-                title: 'شطرنج صقر الاستراتيجي',
-                description: 'نافس لاعبين آخرين في لعبة الشطرنج الكلاسيكية بتصميم عصري.',
-                category: 'ذكاء',
-                icon: 'fa-chess',
-                players: '2 لاعبين',
-                url: '#'
-            },
-            {
-                id: '3',
-                title: 'سرعة الكلمات',
-                description: 'تخمين الكلمات والعبارات بأسرع وقت ممكن قبل انتهاء العداد.',
-                category: 'سرعة',
-                icon: 'fa-font',
-                players: 'جماعي',
-                url: '#'
-            }
-        ];
-
-        let loadedGames = [];
-
-        // Fetch Games Data
         async function fetchGames() {
-            const statusText = document.getElementById('statusText');
-            
-            // 1. Attempt Supabase Direct Query
-            if (supabaseClient) {
-                try {
-                    statusText.textContent = 'جاري التحميل من Supabase...';
-                    const { data, error } = await supabaseClient.from('games').select('*');
-                    if (!error && data && data.length > 0) {
-                        statusText.textContent = 'متصل بـ Supabase';
-                        loadedGames = data;
-                        renderGamesCards(loadedGames);
-                        return;
-                    }
-                } catch (err) {
-                    console.warn('Supabase fetch failed, trying Cloudflare Worker fallback:', err);
-                }
-            }
-
-            // 2. Attempt Cloudflare Worker API Fallback
+            const container = document.getElementById('games-container');
             try {
-                statusText.textContent = 'جاري التحميل عبر API...';
-                const response = await fetch(WORKER_API_URL);
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.length > 0) {
-                        statusText.textContent = 'متصل عبر API Worker';
-                        loadedGames = data;
-                        renderGamesCards(loadedGames);
-                        return;
-                    }
+                const res = await fetch(`${API_BASE_URL}/api/games`);
+                const result = await res.json();
+
+                if (result.success && result.data.length > 0) {
+                    container.innerHTML = result.data.map(game => `
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-amber-500/50 transition-all">
+                            <div class="space-y-3">
+                                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl">
+                                    <i class="${game.icon_class || 'fa-solid fa-trophy'}"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-100">${game.title}</h3>
+                                <p class="text-xs text-slate-400 line-clamp-2">${game.description || 'لعبة جماعية ممتازة للمنافسة المباشرة.'}</p>
+                            </div>
+                            <button onclick="openCreateRoomModal('${game.id}', '${game.title}')" class="mt-6 w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-2.5 rounded-xl text-xs hover:brightness-110 transition-all cursor-pointer">
+                                إنشاء غرفة جديدة
+                            </button>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `<p class="col-span-full text-center text-slate-500 text-xs">لا توجد ألعاب متاحة حالياً.</p>`;
                 }
             } catch (err) {
-                console.warn('Worker API fetch failed, using local fallback:', err);
+                container.innerHTML = `<p class="col-span-full text-center text-rose-400 text-xs">تعذر الاتصال بخادم السحابة.</p>`;
             }
-
-            // 3. Fallback to Local Data
-            statusText.textContent = 'الوضع المحلي (Offline)';
-            loadedGames = defaultSaqrGames;
-            renderGamesCards(loadedGames);
         }
 
-        // Render Game Cards to UI
-        function renderGamesCards(games) {
-            const container = document.getElementById('gamesContainer');
-            container.innerHTML = games.map(game => `
-                <div class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
-                    <div>
-                        <div class="w-14 h-14 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-                            <i class="fa-solid ${game.icon || 'fa-gamepad'}"></i>
-                        </div>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-3 inline-block">
-                            ${game.category || 'عام'}
-                        </span>
-                        <h3 class="text-xl font-bold text-white mb-2">${game.title}</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">${game.description}</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                        <span class="text-xs text-slate-500 flex items-center gap-1.5">
-                            <i class="fa-solid fa-users"></i> ${game.players || 'متعدد اللاعبين'}
-                        </span>
-                        <button onclick="openGameModal('${game.id}')" class="bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 px-4 py-2 rounded-xl text-sm font-bold transition-all">
-                            العب الآن
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Filter Categories & Scroll
-        function filterCategory(cat) {
-            const filtered = loadedGames.filter(g => (g.category || '').includes(cat));
-            renderGamesCards(filtered.length > 0 ? filtered : loadedGames);
-            document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Modal Controls
-        function openGameModal(gameId) {
-            const game = loadedGames.find(g => g.id == gameId) || loadedGames[0];
-            document.getElementById('modalTitle').textContent = game.title;
-            
-            const modalContent = document.getElementById('modalContent');
-            modalContent.innerHTML = `
-                <div class="text-center py-8">
-                    <div class="w-20 h-20 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border border-amber-500/20">
-                        <i class="fa-solid ${game.icon || 'fa-gamepad'}"></i>
-                    </div>
-                    <h4 class="text-2xl font-bold text-white mb-2">${game.title}</h4>
-                    <p class="text-slate-400 max-w-md mx-auto mb-8">${game.description}</p>
-                    <div class="flex justify-center gap-4">
-                        <button onclick="alert('جاري بدء اللعبة...')" class="bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold px-8 py-3 rounded-xl shadow-lg hover:brightness-110 transition-all">
-                            بدء اللعب الفوري
-                        </button>
-                    </div>
+        function openRoomCodeModal() {
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="space-y-4 text-center">
+                    <i class="fa-solid fa-key text-4xl text-amber-500"></i>
+                    <h3 class="text-xl font-black text-slate-100">الانضمام لغرفة</h3>
+                    <input id="join-player-name" type="text" placeholder="اسم اللاعب" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl py-2.5 text-slate-200 focus:border-amber-500 outline-none">
+                    <input id="join-room-code" type="text" maxlength="6" placeholder="كود الغرفة (6 أرقام)" class="w-full text-center text-lg tracking-widest font-black bg-slate-950 border border-slate-700 rounded-xl py-2.5 text-amber-400 focus:border-amber-500 outline-none">
+                    <div id="join-feedback" class="text-xs text-rose-400 min-h-[16px]"></div>
+                    <button onclick="submitJoinRoom()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-3 rounded-xl text-xs cursor-pointer">
+                        دخول الغرفة
+                    </button>
                 </div>
             `;
-            
-            document.getElementById('gameModal').classList.remove('hidden');
+            document.getElementById('game-modal').classList.remove('hidden');
+        }
+
+        function openCreateRoomModal(gameId, gameTitle) {
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="space-y-4 text-center">
+                    <i class="fa-solid fa-plus-circle text-4xl text-amber-500"></i>
+                    <h3 class="text-xl font-black text-slate-100">غرفة جديدة: ${gameTitle}</h3>
+                    <input id="create-host-name" type="text" placeholder="اسمك (المستضيف)" class="w-full text-center bg-slate-950 border border-slate-700 rounded-xl py-2.5 text-slate-200 focus:border-amber-500 outline-none">
+                    <div id="create-feedback" class="text-xs text-rose-400 min-h-[16px]"></div>
+                    <button onclick="submitCreateRoom('${gameId}')" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black py-3 rounded-xl text-xs cursor-pointer">
+                        إنشاء كود الغرفة
+                    </button>
+                </div>
+            `;
+            document.getElementById('game-modal').classList.remove('hidden');
+        }
+
+        async function submitCreateRoom(gameId) {
+            const hostName = document.getElementById('create-host-name').value.trim();
+            const feedback = document.getElementById('create-feedback');
+
+            if (!hostName) {
+                feedback.innerText = "يرجى كتابة اسم المستضيف";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/rooms/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: gameId, host_name: hostName })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    feedback.className = "text-xs font-bold text-emerald-400";
+                    feedback.innerText = `تمت العملية! كود الغرفة: ${data.room.room_code}`;
+                } else {
+                    feedback.innerText = data.message || "فشل إنشاء الغرفة";
+                }
+            } catch (err) {
+                feedback.innerText = "خطأ في الاتصال بالشبكة";
+            }
+        }
+
+        async function submitJoinRoom() {
+            const roomCode = document.getElementById('join-room-code').value.trim();
+            const playerName = document.getElementById('join-player-name').value.trim();
+            const feedback = document.getElementById('join-feedback');
+
+            if (!roomCode || !playerName) {
+                feedback.innerText = "أدخل الاسم وكود الغرفة كاملاً";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/rooms/join`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ room_code: roomCode, player_name: playerName })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    feedback.className = "text-xs font-bold text-emerald-400";
+                    feedback.innerText = `تم الانضمام بنجاح يا ${data.player.player_name}!`;
+                } else {
+                    feedback.innerText = data.message || "الغرفة غير موجودة";
+                }
+            } catch (err) {
+                feedback.innerText = "خطأ في الاتصال بالشبكة";
+            }
         }
 
         function closeGameModal() {
-            document.getElementById('gameModal').classList.add('hidden');
+            document.getElementById('game-modal').classList.add('hidden');
         }
 
-        // Room Joining Handler
-        function joinRoomByCode() {
-            const code = document.getElementById('roomCodeInput').value.trim();
-            if (code) {
-                alert(`جاري الانضمام للغرفة رقم: ${code}`);
-            } else {
-                alert('يرجى إدخال رمز الغرفة أولاً.');
-            }
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+            });
         }
-
-        // Close Modal with ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeGameModal();
-        });
-
-        // Initialize Fetch on Load
-        window.addEventListener('DOMContentLoaded', fetchGames);
     </script>
 </body>
 </html>
