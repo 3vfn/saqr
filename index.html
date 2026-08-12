@@ -72,14 +72,12 @@
           selectDiv.innerHTML = '<option value="">اختر اللعبة...</option>';
 
           data.data.forEach(game => {
-            // إضافة للقائمة
             listDiv.innerHTML += `
               <div class="game-item">
                 <span><b>#${game.id}</b> - ${game.title} (${game.category})</span>
                 <span>⭐ ${game.rating}</span>
               </div>
             `;
-            // إضافة للقائمة المنسدلة
             selectDiv.innerHTML += `<option value="${game.id}">${game.title} (#${game.id})</option>`;
           });
         }
